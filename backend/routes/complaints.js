@@ -5,11 +5,14 @@ const router = express.Router();
 const {
     getComplaints,
     getComplaint,
-    createComplaint
+    createComplaint,
+    getUserComplaints
 } = require("../controllers/complaintController");
 
 
 router.get("/", getComplaints);
+
+router.get("/user/:userId", getUserComplaints);
 
 router.get("/:id", getComplaint);
 

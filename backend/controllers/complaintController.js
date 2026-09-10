@@ -280,3 +280,42 @@ exports.createComplaint = async (req, res) => {
         });
     }
 };
+
+exports.getUserComplaints = (req, res) => {
+    const userId = req.params.userId;
+
+    const sql = `
+        SELECT
+            c.complaint_id,
+            c.subject,
+            c.description,
+            c.priority,
+            c.status,
+            c.created_at,
+            c.updated_at,
+            o.name AS organization_name,
+            cat.name AS category_name
+        FROM complaints c
+        JOIN organizations o
+            ON c.organization_id = o.organization_id
+        JOIN categories cat
+            ON c.category_id = cat.category_id
+        WHERE c.user_id = ?
+        ORDER BY c.created_at DESC
+    `;
+
+    db.query(sql, [userId], (err, complaints) => {
+        if (err) {
+            console.error("Get user complaints error:", err);
+            return res.status(500).json({
+                success: false,
+                message: "Failed to fetch user complaints"
+            });
+        }
+
+        res.json({
+            success: true,
+            complaints
+        });
+    });
+};
