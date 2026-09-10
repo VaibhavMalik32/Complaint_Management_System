@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Complaint Management</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="container">
+
+    <h1>Complaint Management</h1>
+
+    <p class="subtitle">
+        Submit and track complaints across organizations.
+    </p>
+
+
+    <!-- COMPLAINT FORM -->
+
+    <section class="card">
+
+        <h2>Submit a Complaint</h2>
+
+
+        <form id="complaint-form">
+
+
+            <!-- USER -->
+
+            <label for="user">
+                User
+            </label>
+
+            <select id="user" required>
+
+                <option value="">
+                    Select user
+                </option>
+
+            </select>
+
+
+            <!-- ORGANIZATION -->
+
+            <label for="organization">
+                Organization
+            </label>
+
+            <select
+                id="organization"
+                required
+            >
+
+                <option value="">
+                    Select organization
+                </option>
+
+            </select>
+
+
+            <!-- CATEGORY -->
+
+            <label for="category">
+                Complaint Category
+            </label>
+
+            <select
+                id="category"
+                required
+            >
+
+                <option value="">
+                    Select category
+                </option>
+
+            </select>
+
+
+            <!-- SUBJECT -->
+
+            <label for="subject">
+                Subject
+            </label>
+
+            <input
+                type="text"
+                id="subject"
+                maxlength="200"
+                placeholder="Briefly describe the issue"
+                required
+            >
+
+
+            <!-- DESCRIPTION -->
+
+            <label for="description">
+                Description
+            </label>
+
+            <textarea
+                id="description"
+                rows="6"
+                placeholder="Describe the complaint in detail..."
+                required
+            ></textarea>
+
+
+            <!-- PRIORITY -->
+
+            <label for="priority">
+                Priority
+            </label>
+
+            <select id="priority">
+
+                <option value="Low">
+                    Low
+                </option>
+
+                <option
+                    value="Medium"
+                    selected
+                >
+                    Medium
+                </option>
+
+                <option value="High">
+                    High
+                </option>
+
+                <option value="Critical">
+                    Critical
+                </option>
+
+            </select>
+
+
+            <div class="actions">
+
+                <button type="submit">
+                    Submit Complaint
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+        <p id="form-message"></p>
+
+    </section>
+
+
+
+    <!-- COMPLAINT LIST -->
+
+    <section class="card">
+
+        <div class="section-header">
+
+            <h2>Submitted Complaints</h2>
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="loadComplaints()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="complaint-list">
+
+            Loading...
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<script>
+
+
+// Load users
+
+async function loadUsers() {
+
+    try {
+
+        const response =
+            await fetch("/api/users");
+
+        const data =
+            await response.json();
+
+
+        const select =
+            document.getElementById("user");
+
+
+        select.innerHTML =
+            `<option value="">
+                Select user
+            </option>`;
+
+
+        data.users.forEach(user => {
+
+            select.innerHTML += `
+                <option value="${user.user_id}">
+                    ${escapeHtml(user.name)}
+                </option>
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load users:",
+            error
+        );
+    }
+}
+
+
+
+// Load organizations
+
+async function loadOrganizations() {
+
+    try {
+
+        const response =
+            await fetch("/api/organizations");
+
+        const data =
+            await response.json();
+
+
+        const select =
+            document.getElementById(
+                "organization"
+            );
+
+
+        select.innerHTML =
+            `<option value="">
+                Select organization
+            </option>`;
+
+
+        data.organizations.forEach(org => {
+
+            select.innerHTML += `
+                <option value="${org.organization_id}">
+                    ${escapeHtml(org.name)}
+                </option>
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load organizations:",
+            error
+        );
+    }
+}
+
+
+
+// Load categories according to organization
+
+async function loadCategories() {
+
+    const organizationId =
+        document.getElementById(
+            "organization"
+        ).value;
+
+
+    const categorySelect =
+        document.getElementById(
+            "category"
+        );
+
+
+    categorySelect.innerHTML =
+        `<option value="">
+            Select category
+        </option>`;
+
+
+    if (!organizationId) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch("/api/categories");
+
+        const data =
+            await response.json();
+
+
+        data.categories
+
+            .filter(
+                category =>
+                    String(
+                        category.organization_id
+                    ) === String(
+                        organizationId
+                    )
+            )
+
+            .forEach(category => {
+
+                categorySelect.innerHTML += `
+
+                    <option
+                        value="${category.category_id}"
+                    >
+                        ${escapeHtml(
+                            category.name
+                        )}
+                    </option>
+
+                `;
+
+            });
+
+    } catch (error) {
+
+        console.error(
+            "Failed to load categories:",
+            error
+        );
+    }
+}
+
+
+
+// Organization changed
+
+document
+    .getElementById("organization")
+    .addEventListener(
+        "change",
+        loadCategories
+    );
+
+
+
+// Submit complaint
+
+document
+    .getElementById("complaint-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const message =
+                document.getElementById(
+                    "form-message"
+                );
+
+
+            message.textContent =
+                "Submitting complaint...";
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/complaints",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                user_id:
+                                    document.getElementById(
+                                        "user"
+                                    ).value,
+
+                                organization_id:
+                                    document.getElementById(
+                                        "organization"
+                                    ).value,
+
+                                category_id:
+                                    document.getElementById(
+                                        "category"
+                                    ).value,
+
+                                subject:
+                                    document.getElementById(
+                                        "subject"
+                                    ).value,
+
+                                description:
+                                    document.getElementById(
+                                        "description"
+                                    ).value,
+
+                                priority:
+                                    document.getElementById(
+                                        "priority"
+                                    ).value
+
+                            })
+
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                message.textContent =
+                    data.message;
+
+
+                if (data.success) {
+
+                    event.target.reset();
+
+                    document.getElementById(
+                        "category"
+                    ).innerHTML =
+                        `<option value="">
+                            Select category
+                        </option>`;
+
+                    loadComplaints();
+                }
+
+
+            } catch (error) {
+
+                message.textContent =
+                    "Failed to submit complaint.";
+            }
+
+        }
+    );
+
+
+
+// Load complaints
+
+async function loadComplaints() {
+
+    const list =
+        document.getElementById(
+            "complaint-list"
+        );
+
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/complaints"
+            );
+
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+
+            throw new Error(
+                data.message
+            );
+        }
+
+
+        if (
+            data.complaints.length === 0
+        ) {
+
+            list.innerHTML =
+                "<p>No complaints submitted yet.</p>";
+
+            return;
+        }
+
+
+        list.innerHTML =
+            data.complaints
+                .map(complaint => `
+
+                    <article
+                        class="organization-item"
+                    >
+
+                        <div>
+
+                            <h3>
+                                #${complaint.complaint_id}
+                                -
+                                ${escapeHtml(
+                                    complaint.subject
+                                )}
+                            </h3>
+
+                            <p>
+
+                                <strong>
+                                    User:
+                                </strong>
+
+                                ${escapeHtml(
+                                    complaint.user_name
+                                )}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Organization:
+                                </strong>
+
+                                ${escapeHtml(
+                                    complaint.organization_name
+                                )}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Category:
+                                </strong>
+
+                                ${escapeHtml(
+                                    complaint.category_name
+                                )}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Priority:
+                                </strong>
+
+                                ${escapeHtml(
+                                    complaint.priority
+                                )}
+
+                            </p>
+
+
+                            <p>
+
+                                <strong>
+                                    Status:
+                                </strong>
+
+                                ${escapeHtml(
+                                    complaint.status
+                                )}
+
+                            </p>
+
+
+                            <p>
+
+                                ${escapeHtml(
+                                    complaint.description
+                                )}
+
+                            </p>
+
+                        </div>
+
+                    </article>
+
+                `)
+                .join("");
+
+
+    } catch (error) {
+
+        list.innerHTML =
+            `<p class="error">
+                ${escapeHtml(
+                    error.message
+                )}
+            </p>`;
+    }
+}
+
+
+
+// HTML escaping
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+}
+
+
+
+// Initial loading
+
+loadUsers();
+
+loadOrganizations();
+
+loadComplaints();
+
+</script>
+
+</body>
+
+</html>

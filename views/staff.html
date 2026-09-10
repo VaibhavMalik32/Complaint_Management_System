@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Staff Management</title>
+
+    <link
+        rel="stylesheet"
+        href="/css/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="container">
+
+    <h1>Staff Management</h1>
+
+    <p class="subtitle">
+        Assign users to departments as staff members.
+    </p>
+
+
+    <!-- ADD STAFF -->
+
+    <section class="card">
+
+        <h2>Add Staff Member</h2>
+
+        <form id="staff-form">
+
+
+            <label for="user">
+                User
+            </label>
+
+            <select id="user" required>
+
+                <option value="">
+                    Select user
+                </option>
+
+            </select>
+
+
+            <label for="department">
+                Department
+            </label>
+
+            <select id="department" required>
+
+                <option value="">
+                    Select department
+                </option>
+
+            </select>
+
+
+            <label for="designation">
+                Designation
+            </label>
+
+            <input
+                type="text"
+                id="designation"
+                placeholder="Support Executive"
+                maxlength="100"
+                required
+            >
+
+
+            <div class="actions">
+
+                <button type="submit">
+                    Add Staff Member
+                </button>
+
+            </div>
+
+        </form>
+
+        <p id="form-message"></p>
+
+    </section>
+
+
+    <!-- STAFF LIST -->
+
+    <section class="card">
+
+        <div class="section-header">
+
+            <h2>Staff Members</h2>
+
+            <button
+                type="button"
+                class="secondary"
+                onclick="loadStaff()"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+        <div id="staff-list">
+            Loading...
+        </div>
+
+    </section>
+
+</main>
+
+
+<script>
+
+
+// Load users who are not staff yet
+
+async function loadUsers() {
+
+    const select =
+        document.getElementById("user");
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/staff/available-users"
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+
+
+        select.innerHTML =
+            `<option value="">
+                Select user
+            </option>`;
+
+
+        data.users.forEach(user => {
+
+            select.innerHTML += `
+                <option value="${user.user_id}">
+                    ${escapeHtml(user.name)}
+                    (${escapeHtml(user.email)})
+                </option>
+            `;
+
+        });
+
+    } catch (error) {
+
+        select.innerHTML =
+            `<option value="">
+                Failed to load users
+            </option>`;
+
+        console.error(error);
+    }
+}
+
+
+
+// Load departments
+
+async function loadDepartments() {
+
+    const select =
+        document.getElementById(
+            "department"
+        );
+
+    try {
+
+        const response =
+            await fetch(
+                "/api/departments"
+            );
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+
+
+        select.innerHTML =
+            `<option value="">
+                Select department
+            </option>`;
+
+
+        data.departments.forEach(department => {
+
+            select.innerHTML += `
+                <option value="${department.department_id}">
+                    ${escapeHtml(
+                        department.name
+                    )}
+                    -
+                    ${escapeHtml(
+                        department.organization_name
+                    )}
+                </option>
+            `;
+
+        });
+
+    } catch (error) {
+
+        console.error(error);
+    }
+}
+
+
+
+// Load staff
+
+async function loadStaff() {
+
+    const list =
+        document.getElementById(
+            "staff-list"
+        );
+
+    try {
+
+        const response =
+            await fetch("/api/staff");
+
+        const data =
+            await response.json();
+
+
+        if (!data.success) {
+            throw new Error(data.message);
+        }
+
+
+        if (data.staff.length === 0) {
+
+            list.innerHTML =
+                "<p>No staff members added yet.</p>";
+
+            return;
+        }
+
+
+        list.innerHTML =
+            data.staff.map(member => `
+
+                <article
+                    class="organization-item"
+                >
+
+                    <div>
+
+                        <h3>
+                            ${escapeHtml(
+                                member.user_name
+                            )}
+                        </h3>
+
+                        <p>
+                            <strong>
+                                Email:
+                            </strong>
+
+                            ${escapeHtml(
+                                member.email
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Department:
+                            </strong>
+
+                            ${escapeHtml(
+                                member.department_name
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Organization:
+                            </strong>
+
+                            ${escapeHtml(
+                                member.organization_name
+                            )}
+                        </p>
+
+                        <p>
+                            <strong>
+                                Designation:
+                            </strong>
+
+                            ${escapeHtml(
+                                member.designation
+                            )}
+                        </p>
+
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="danger"
+                        onclick="deleteStaff(
+                            ${member.staff_id}
+                        )"
+                    >
+                        Delete
+                    </button>
+
+                </article>
+
+            `).join("");
+
+    } catch (error) {
+
+        list.innerHTML =
+            `<p class="error">
+                ${escapeHtml(error.message)}
+            </p>`;
+    }
+}
+
+
+
+// Add staff
+
+document
+    .getElementById("staff-form")
+    .addEventListener(
+        "submit",
+        async event => {
+
+            event.preventDefault();
+
+
+            const message =
+                document.getElementById(
+                    "form-message"
+                );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/staff",
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+
+                                user_id:
+                                    document.getElementById(
+                                        "user"
+                                    ).value,
+
+                                department_id:
+                                    document.getElementById(
+                                        "department"
+                                    ).value,
+
+                                designation:
+                                    document.getElementById(
+                                        "designation"
+                                    ).value
+
+                            })
+                        }
+                    );
+
+
+                const data =
+                    await response.json();
+
+
+                message.textContent =
+                    data.message;
+
+
+                if (data.success) {
+
+                    event.target.reset();
+
+                    loadUsers();
+
+                    loadStaff();
+                }
+
+            } catch (error) {
+
+                message.textContent =
+                    "Failed to create staff member.";
+            }
+        }
+    );
+
+
+
+// Delete staff
+
+async function deleteStaff(id) {
+
+    if (!confirm(
+        "Delete this staff member?"
+    )) {
+        return;
+    }
+
+
+    try {
+
+        const response =
+            await fetch(
+                `/api/staff/${id}`,
+                {
+                    method: "DELETE"
+                }
+            );
+
+
+        const data =
+            await response.json();
+
+
+        alert(data.message);
+
+
+        loadUsers();
+
+        loadStaff();
+
+    } catch (error) {
+
+        alert(
+            "Failed to delete staff member."
+        );
+    }
+}
+
+
+
+// HTML escaping
+
+function escapeHtml(value) {
+
+    return String(value)
+
+        .replaceAll("&", "&amp;")
+
+        .replaceAll("<", "&lt;")
+
+        .replaceAll(">", "&gt;")
+
+        .replaceAll('"', "&quot;")
+
+        .replaceAll("'", "&#039;");
+}
+
+
+
+// Initial loading
+
+loadUsers();
+
+loadDepartments();
+
+loadStaff();
+
+</script>
+
+</body>
+
+</html>
