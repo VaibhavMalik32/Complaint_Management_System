@@ -8,22 +8,17 @@ export const registerUser = async (userData) => {
     },
     body: JSON.stringify(userData),
   });
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data.detail || "Registration failed");
   }
-
   return data;
 };
 
 export const loginUser = async (username, password) => {
   const formData = new URLSearchParams();
-
   formData.append("username", username);
   formData.append("password", password);
-
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -31,19 +26,15 @@ export const loginUser = async (username, password) => {
     },
     body: formData,
   });
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data.detail || "Login failed");
   }
-
   return data;
 };
 
 export const createComplaint = async (complaintData) => {
   const token = localStorage.getItem("access_token");
-
   const response = await fetch(
     `${API_URL}/complaints/create`,
     {
@@ -55,21 +46,17 @@ export const createComplaint = async (complaintData) => {
       body: JSON.stringify(complaintData),
     }
   );
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(
       data.detail || "Failed to create complaint"
     );
   }
-
   return data;
 };
 
 export const getMyComplaints = async () => {
   const token = localStorage.getItem("access_token");
-
   const response = await fetch(
     `${API_URL}/complaints/my`,
     {
@@ -79,21 +66,17 @@ export const getMyComplaints = async () => {
       },
     }
   );
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(
       data.detail || "Failed to fetch complaints"
     );
   }
-
   return data;
 };
 
 export const deleteComplaint = async (complaintId) => {
   const token = localStorage.getItem("access_token");
-
   const response = await fetch(
     `${API_URL}/complaints/${complaintId}`,
     {
@@ -103,14 +86,93 @@ export const deleteComplaint = async (complaintId) => {
       },
     }
   );
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(
       data.detail || "Failed to delete complaint"
     );
   }
+  return data;
+};
 
+export const getAllComplaints = async () => {
+  const token = localStorage.getItem("access_token");
+  const response = await fetch(`${API_URL}/complaints/all`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.detail || "Failed to fetch complaints");
+  }
+  return data;
+};
+
+export const updateComplaintStatus = async (
+  complaintId,
+  status
+) => {
+  const token = localStorage.getItem("access_token");
+  const response = await fetch(
+    `${API_URL}/complaints/${complaintId}/status`,
+    {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        status: status,
+      }),
+    }
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to update complaint status"
+    );
+  }
+  return data;
+};
+
+export const getComplaintHistory = async (complaintId) => {
+  const token = localStorage.getItem("access_token");
+  const response = await fetch(
+    `${API_URL}/complaints/${complaintId}/history`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to fetch complaint history"
+    );
+  }
+  return data;
+};
+
+export const getComplaint = async (complaintId) => {
+  const token = localStorage.getItem("access_token");
+  const response = await fetch(
+    `${API_URL}/complaints/${complaintId}`,
+    {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to fetch complaint"
+    );
+  }
   return data;
 };

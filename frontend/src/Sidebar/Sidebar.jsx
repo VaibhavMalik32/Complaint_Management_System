@@ -15,31 +15,29 @@ function Sidebar() {
           </div>
         </div>
         <div className="h-10 border -ml-5 cursor-pointer">
-          <div className="justify-center items-center flex">
-            <NavLink to="/"
-            className={({ isActive }) => 
-                `block px-2 py-1.5 
-                ${isActive ? "bg-white" : "bg-white"}`}
-            >Home Page</NavLink>
+          <div className="h-10 justify-center items-center flex">
+            <NavLink to="/home" end
+            className={({ isActive }) => isActive ? "bg-black text-white px-24.5 py-2 ml-4.5" : "bg-white"}>
+              Home Page</NavLink>
           </div>
         </div>
         <div className="h-10 justify-center items-center flex border -ml-5">
           <div>
-            <NavLink to="/home/complaints" className={({ isActive }) => isActive ? "bg-white" : "bg-white"}>
+            <NavLink to="/home/complaints" className={({ isActive }) => isActive ? "bg-black text-white px-22 py-2 ml-3.5" : "bg-white"}>
               My Complaints
             </NavLink>
           </div>
         </div>
         <div className="h-10 justify-center items-center flex border -ml-5">
           <div>
-            <NavLink to="/home/create-complaint" className={({ isActive }) => isActive ? "bg-white" : "bg-white"}>
+            <NavLink to="/home/create-complaint" className={({ isActive }) => `${isActive ? "bg-black text-white px-21 py-2 ml-3.5" : "bg-white"}`}>
               Add Complaints
             </NavLink>
           </div>
         </div>
-        <div className="h-20 justify-center items-center flex mt-112 border bg-blue-200">
+        <div className="h-20 justify-center items-center flex mt-112">
           <div>
-            <button className="outline rounded-xl bg-red-500 w-20 cursor-pointer" onClick={logout}>
+            <button className="outline rounded-xl text-red-600 w-20 cursor-pointer" onClick={logout}>
               Log Out
             </button>
           </div>

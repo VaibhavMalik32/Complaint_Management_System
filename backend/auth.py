@@ -1,9 +1,7 @@
 from datetime import timedelta
-
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
-
 from db import get_db
 from models import User
 from schema import UserCreate, UserResponse
@@ -85,7 +83,8 @@ def login(
 
     return {
         "access_token": access_token,
-        "token_type": "bearer"
+        "token_type": "bearer",
+        "role":user.role
     }
 
 @router.post("/logout")

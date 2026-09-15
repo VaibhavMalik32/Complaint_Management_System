@@ -10,6 +10,7 @@ import Login from './Login/Login.jsx'
 import AddComplaint from './User/AddComplaint.jsx'
 
 import "./App.css"
+import AdminDashboard from './Admin/AdminDashboard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       }
     ]
   },
+  {
+    path:"/admin",
+    element:<AdminDashboard/>
+  }
 ])
 
 createRoot(document.getElementById('root')).render(
