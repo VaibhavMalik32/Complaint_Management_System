@@ -1,235 +1,116 @@
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://127.0.0.1:8000";
 
-async function request(endpoint, options = {}) {
-    const response = await fetch(
-        `${API_URL}${endpoint}`,
-        {
-            headers: {
-                "Content-Type": "application/json",
-                ...(options.headers || {})
-            },
-            ...options
-        }
-    );
+export const registerUser = async (userData) => {
+  const response = await fetch(`${API_URL}/auth/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
 
-    const data = await response.json();
+  const data = await response.json();
 
-    if (!response.ok) {
-        throw new Error(
-            data.message || "Request failed"
-        );
+  if (!response.ok) {
+    throw new Error(data.detail || "Registration failed");
+  }
+
+  return data;
+};
+
+export const loginUser = async (username, password) => {
+  const formData = new URLSearchParams();
+
+  formData.append("username", username);
+  formData.append("password", password);
+
+  const response = await fetch(`${API_URL}/auth/login`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: formData,
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.detail || "Login failed");
+  }
+
+  return data;
+};
+
+export const createComplaint = async (complaintData) => {
+  const token = localStorage.getItem("access_token");
+
+  const response = await fetch(
+    `${API_URL}/complaints/create`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+      body: JSON.stringify(complaintData),
     }
+  );
 
-    return data;
-}
+  const data = await response.json();
 
-
-// =========================
-// ORGANIZATIONS
-// =========================
-
-export const getOrganizations = () =>
-    request("/organizations");
-
-export const getOrganization = (id) =>
-    request(`/organizations/${id}`);
-
-export const createOrganization = (data) =>
-    request("/organizations", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-
-// =========================
-// DEPARTMENTS
-// =========================
-
-export const getDepartments = () =>
-    request("/departments");
-
-export const getDepartment = (id) =>
-    request(`/departments/${id}`);
-
-export const createDepartment = (data) =>
-    request("/departments", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-
-// =========================
-// CATEGORIES
-// =========================
-
-export const getCategories = () =>
-    request("/categories");
-
-export const getCategory = (id) =>
-    request(`/categories/${id}`);
-
-export const createCategory = (data) =>
-    request("/categories", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-
-// =========================
-// USERS
-// =========================
-
-export const getUsers = () =>
-    request("/users");
-
-
-// =========================
-// COMPLAINTS
-// =========================
-
-export const getComplaints = () =>
-    request("/complaints");
-
-export const getComplaint = (id) =>
-    request(`/complaints/${id}`);
-
-export const createComplaint = (data) =>
-    request("/complaints", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-
-// =========================
-// STAFF
-// =========================
-
-export const getStaff = () =>
-    request("/staff");
-
-export const getAvailableUsers = () =>
-    request("/staff/available-users");
-
-export const createStaff = (data) =>
-    request("/staff", {
-        method: "POST",
-        body: JSON.stringify(data)
-    });
-
-
-// =========================
-// MANAGEMENT
-// =========================
-
-export const getManagedComplaints = () =>
-    request("/management/complaints");
-
-export const getAssignmentStaff = () =>
-    request("/management/staff");
-
-export const assignComplaint = (
-    complaintId,
-    staffId
-) =>
-    request(
-        `/management/complaints/${complaintId}/assign`,
-        {
-            method: "POST",
-            body: JSON.stringify({
-                staff_id: staffId
-            })
-        }
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to create complaint"
     );
+  }
 
-export const updateComplaintStatus = (
-    complaintId,
-    status,
-    remarks
-) =>
-    request(
-        `/management/complaints/${complaintId}/status`,
-        {
-            method: "PUT",
-            body: JSON.stringify({
-                status,
-                remarks
-            })
-        }
-    );
+  return data;
+};
 
-export const getComplaintHistory = (
-    complaintId
-) =>
-    request(
-        `/management/complaints/${complaintId}/history`
-    );
+export const getMyComplaints = async () => {
+  const token = localStorage.getItem("access_token");
 
-
-// =========================
-// RESOLUTION
-// =========================
-
-export const getResolution = (
-    complaintId
-) =>
-    request(
-        `/resolutions/complaints/${complaintId}`
-    );
-
-export const createResolution = (
-    complaintId,
-    data
-) =>
-    request(
-        `/resolutions/complaints/${complaintId}`,
-        {
-            method: "POST",
-            body: JSON.stringify(data)
-        }
-    );
-
-export const closeComplaint = (
-    complaintId,
-    data
-) =>
-    request(
-        `/resolutions/complaints/${complaintId}/close`,
-        {
-            method: "PUT",
-            body: JSON.stringify(data)
-        }
-    );
-
-
-// =========================
-// FEEDBACK
-// =========================
-
-export const getFeedback = (
-    complaintId
-) =>
-    request(
-        `/feedback/complaints/${complaintId}`
-    );
-
-export const createFeedback = (
-    complaintId,
-    data
-) =>
-    request(
-        `/feedback/complaints/${complaintId}`,
-        {
-            method: "POST",
-            body: JSON.stringify(data)
-        }
-    );
-
-export const getUserComplaints = async (userId) => {
-    const response = await fetch(`${API_URL}/complaints/user/${userId}`);
-
-    if (!response.ok) {
-        throw new Error("Failed to fetch user complaints");
+  const response = await fetch(
+    `${API_URL}/complaints/my`,
+    {
+      method: "GET",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
     }
+  );
 
-    return response.json();
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to fetch complaints"
+    );
+  }
+
+  return data;
+};
+
+export const deleteComplaint = async (complaintId) => {
+  const token = localStorage.getItem("access_token");
+
+  const response = await fetch(
+    `${API_URL}/complaints/${complaintId}`,
+    {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${token}`,
+      },
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(
+      data.detail || "Failed to delete complaint"
+    );
+  }
+
+  return data;
 };
