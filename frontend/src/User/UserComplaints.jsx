@@ -142,16 +142,23 @@ function UserComplaints() {
                         ).toLocaleDateString()
                       : "N/A"}
                   </p>
-                  <button
-                    onClick={() =>
-                      handleDelete(
-                        complaint.complaint_id
-                      )
-                    }
-                    className="w-fit rounded-xl border px-4 py-2 text-sm font-medium text-red-600 cursor-pointer"
-                  >
-                    Delete
-                  </button>
+                  <div className="flex gap-3">
+                    <button
+                      onClick={() =>
+                        navigate(`/home/complaints/${complaint.complaint_id}`)
+                      }
+                      className="rounded-xl border px-5 py-3 font-medium text-white bg-black cursor-pointer"
+                    >
+                      View
+                    </button>
+
+                    <button
+                      onClick={() => handleDelete(complaint.complaint_id)}
+                      className="rounded-xl border border-red-500 px-5 py-3 font-medium text-red-600 transition hover:bg-red-50"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

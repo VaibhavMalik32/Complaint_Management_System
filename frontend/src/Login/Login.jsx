@@ -13,9 +13,17 @@ function Login() {
     try {
       const data = await loginUser(username, password);
       localStorage.setItem("access_token", data.access_token);
-      if(data.role === "admin" ){
-        navigate("/admin")
-      }else{
+      localStorage.setItem("role", data.role);
+      if (data.role === "admin") {
+        navigate("/admin");
+      } 
+      else if(data.role === "super_admin"){
+        navigate("/super-admin");
+      }
+      else if(data.role === "employee"){
+        navigate("/employee");
+      }
+      else {
         navigate("/home");
       }
     } catch (err) {

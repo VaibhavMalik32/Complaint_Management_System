@@ -1,9 +1,19 @@
-import { getAllComplaints,updateComplaintStatus } from "../api.js";
+import {
+  getAllComplaints,
+  updateComplaintStatus,
+  getMatchingEmployees,
+  assignComplaint,
+} from "../api.js";
+
 import { useState, useEffect } from "react";
 
 function AdminDashboard() {
   const [complaints, setComplaints] = useState([]);
+  const [employees, setEmployees] = useState([]);
+  const [selectedEmployees, setSelectedEmployees] = useState({});
   const [loading, setLoading] = useState(true);
+  const [assigning, setAssigning] = useState(null);
+  const [error, setError] = useState("");
   const fetchComplaints = async () => {
     try {
       setLoading(true);
@@ -11,12 +21,24 @@ function AdminDashboard() {
       setComplaints(data);
     } catch (err) {
       console.log(err);
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+  const fetchEmployees = async () => {
+    try {
+      const data = await getMatchingEmployees();
+
+      setEmployees(data);
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    }
+  };
   useEffect(() => {
     fetchComplaints();
+    fetchEmployees();
   }, []);
   const total = complaints.length;
   const inReview = complaints.filter(
@@ -31,14 +53,56 @@ function AdminDashboard() {
   const rejected = complaints.filter(
     (c) => c.status === "Rejected"
   ).length;
-  const handleStatusChange = async (complaintId, newStatus) => {
-  try {
-    await updateComplaintStatus(complaintId, newStatus);
-    await fetchComplaints();
-  } catch (err) {
-    console.log(err);
-  }
-};
+  const handleStatusChange = async (
+    complaintId,
+    newStatus
+  ) => {
+    try {
+      await updateComplaintStatus(
+        complaintId,
+        newStatus
+      );
+      await fetchComplaints();
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    }
+  };
+  const handleEmployeeChange = (
+    complaintId,
+    employeeId
+  ) => {
+    setSelectedEmployees({
+      ...selectedEmployees,
+      [complaintId]: employeeId,
+    });
+  };
+  const handleAssign = async (complaintId) => {
+    const employeeId = selectedEmployees[complaintId];
+    if (!employeeId) {
+      setError("Please select an employee first.");
+      return;
+    }
+    try {
+      setError("");
+      setAssigning(complaintId);
+      await assignComplaint(
+        complaintId,
+        Number(employeeId)
+      );
+      await fetchComplaints();
+      setSelectedEmployees((prev) => {
+        const updated = { ...prev };
+        delete updated[complaintId];
+        return updated;
+      });
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    } finally {
+      setAssigning(null);
+    }
+  };
   return (
     <div className="min-h-screen w-full bg-white">
       <div className="border-b px-8 py-4">
@@ -47,6 +111,11 @@ function AdminDashboard() {
         </h1>
       </div>
       <div className="mx-auto max-w-7xl px-8 py-10">
+        {error && (
+          <div className="mb-6 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-600">
+            {error}
+          </div>
+        )}
         {loading ? (
           <div className="flex justify-center py-20">
             <p>Loading...</p>
@@ -82,7 +151,7 @@ function AdminDashboard() {
             </div>
             <div className="mt-12">
               <h2 className="mb-5 text-2xl font-semibold">
-                All Complaints
+                Complaints
               </h2>
               {complaints.length === 0 ? (
                 <div className="rounded-xl border p-8 text-center">
@@ -106,6 +175,9 @@ function AdminDashboard() {
                           Status
                         </th>
                         <th className="px-5 py-4 text-left">
+                          Employee
+                        </th>
+                        <th className="px-5 py-4 text-left">
                           Date
                         </th>
                       </tr>
@@ -127,32 +199,82 @@ function AdminDashboard() {
                           </td>
                           <td className="px-5 py-4">
                             <select
-                                value={complaint.status}
-                                onChange={(e) =>
+                              value={complaint.status}
+                              onChange={(e) =>
                                 handleStatusChange(
+                                  complaint.complaint_id,
+                                  e.target.value
+                                )
+                              }
+                              className="rounded-lg border px-3 py-2 outline-none"
+                            >
+                              <option value="In Review">
+                                In Review
+                              </option>
+                              <option value="In Progress">
+                                In Progress
+                              </option>
+                              <option value="Resolved">
+                                Resolved
+                              </option>
+                              <option value="Rejected">
+                                Rejected
+                              </option>
+                            </select>
+                          </td>
+                          <td className="px-5 py-4">
+                            <div className="flex items-center gap-2">
+                              <select
+                                value={
+                                  selectedEmployees[
+                                    complaint.complaint_id
+                                  ] ||
+                                  complaint.employee_id ||
+                                  ""
+                                }
+                                onChange={(e) =>
+                                  handleEmployeeChange(
                                     complaint.complaint_id,
                                     e.target.value
-                                )
+                                  )
                                 }
                                 className="rounded-lg border px-3 py-2 outline-none"
-                            >
-                                <option value="In Review">
-                                In Review
+                              >
+                                <option value="">
+                                  Select Employee
                                 </option>
+                                {employees.map(
+                                  (employee) => (
+                                    <option
+                                      key={employee.user_id}
+                                      value={employee.user_id}
+                                    >
+                                      {employee.full_name}
+                                    </option>
+                                  )
+                                )}
+                              </select>
+                              <button
+                                onClick={() =>
+                                  handleAssign(
+                                    complaint.complaint_id
+                                  )
+                                }
+                                disabled={
+                                  assigning ===
+                                  complaint.complaint_id
+                                }
+                                className="rounded-lg border px-4 py-2 hover:bg-black hover:text-white disabled:opacity-50"
+                              >
 
-                                <option value="In Progress">
-                                In Progress
-                                </option>
+                                {assigning ===
+                                complaint.complaint_id
+                                  ? "Assigning..."
+                                  : "Assign"}
 
-                                <option value="Resolved">
-                                Resolved
-                                </option>
-
-                                <option value="Rejected">
-                                Rejected
-                                </option>
-                            </select>
-                            </td>
+                              </button>
+                            </div>
+                          </td>
                           <td className="px-5 py-4">
                             {complaint.created_at
                               ? new Date(

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.staticfiles import StaticFiles
 from db import Base, engine
 import auth
 import complaints
@@ -16,7 +16,11 @@ app.add_middleware(
     allow_methods=["*"], #to allow http methods
     allow_headers=["*"], #to allow http headers
 )
-
+app.mount(
+    "/uploads",
+    StaticFiles(directory="uploads"),
+    name="uploads"
+)
 app.include_router(auth.router) #adds all authentication routes
 app.include_router(complaints.router) #adds all complaint routes
 

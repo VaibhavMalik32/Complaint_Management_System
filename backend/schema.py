@@ -10,7 +10,15 @@ class UserBase(BaseModel):
 
 #create user schema
 class UserCreate(UserBase):
+    username: str
+    full_name: str
+    email: EmailStr
     password: str
+
+    phone: str
+    address: str
+    city: str
+    state: str
 
 #user response schema
 class UserResponse(UserBase):
@@ -26,16 +34,24 @@ class ComplaintCreate(BaseModel):
     description: str
     category: str
 
+class ComplaintImageResponse(BaseModel):
+    image_id: int
+    image_path: str
+    class Config:
+        from_attributes = True
+
 #complaint response schema
 class ComplaintResponse(BaseModel):
     complaint_id: int
     user_id: int
+    employee_id: int | None = None
     title: str
     description: str
     category: str
     status: str
-    created_at: datetime
-    updated_at: datetime 
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
+    images: list[ComplaintImageResponse] = []
     class Config:
         from_attributes = True
 
@@ -43,6 +59,7 @@ class ComplaintResponse(BaseModel):
 class ComplaintUpdateResponse(BaseModel):
     update_id: int
     complaint_id: int
+    employee_id: int
     updated_by: int
     old_status: str
     new_status: str
@@ -58,3 +75,6 @@ class ComplaintStatusUpdate(BaseModel):
         "Resolved",
         "Rejected"
     ]
+
+class ComplaintAssign(BaseModel):
+    employee_id: int

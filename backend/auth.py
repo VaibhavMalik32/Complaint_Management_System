@@ -1,55 +1,83 @@
-from datetime import timedelta
+from datetime import timedelta,datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 from db import get_db
-from models import User
+from models import User,EmailOTP
+from email_service import send_otp_email
 from schema import UserCreate, UserResponse
 from security import (
     verify_password,
     get_password_hash,
     create_access_token
 )
+from pydantic import BaseModel
+import secrets
 
 router = APIRouter(
     prefix="/auth",
     tags=["Authentication"]
 )
 
+def generate_otp():
+    return str(secrets.randbelow(900000)+100000)
+
+
 @router.post("/register", response_model=UserResponse)
-def register(
+async def register(
     user_data: UserCreate,
     db: Session = Depends(get_db)
 ):
-    existing_user = db.query(User).filter(User.username == user_data.username).first()
-
+    existing_user = db.query(User).filter(
+        User.username == user_data.username
+    ).first()
     if existing_user:
         raise HTTPException(
             status_code=400,
             detail="Username already exists"
         )
-
-    existing_email = db.query(User).filter(User.email == user_data.email).first()
-
+    existing_email = db.query(User).filter(
+        User.email == user_data.email
+    ).first()
     if existing_email:
         raise HTTPException(
             status_code=400,
             detail="Email already exists"
         )
+    
+    verified_otp = db.query(EmailOTP).filter(
+        EmailOTP.email == user_data.email,
+        EmailOTP.verified == True,
+        EmailOTP.used == False
+    ).order_by(
+        EmailOTP.created_at.desc()
+    ).first()
 
+    if not verified_otp:
+        raise HTTPException(
+            status_code=400,
+            detail="Please verify your email before registering"
+        )
     new_user = User(
         username=user_data.username,
         email=user_data.email,
         full_name=user_data.full_name,
+        phone=user_data.phone,
+        address=user_data.address,
+        city=user_data.city,
+        state=user_data.state,
         hashed_password=get_password_hash(user_data.password),
         disabled=False,
-        role="user"
+        role="user",
+        is_email_verified=True
     )
-
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+    verified_otp.user_id = new_user.user_id
+    verified_otp.used = True
 
+    db.commit()
     return new_user
 
 @router.post("/login")
@@ -74,6 +102,12 @@ def login(
             detail="Incorrect username or password"
         )
 
+    if not user.is_email_verified:
+        raise HTTPException(
+            status_code=403,
+            detail="Please verify your email before logging in"
+        )
+
     access_token_expires = timedelta(minutes=30)
 
     access_token = create_access_token(
@@ -90,3 +124,87 @@ def login(
 @router.post("/logout")
 def logout():
     return {"message": "Successfully logged out"}
+
+
+class OTPVerify(BaseModel):
+    email: str
+    otp: str
+
+@router.post("/verify-otp")
+def verify_otp(
+    otp_data: OTPVerify,
+    db: Session = Depends(get_db)
+):
+    otp_record = db.query(EmailOTP).filter(
+        EmailOTP.email == otp_data.email,
+        EmailOTP.otp == otp_data.otp,
+        EmailOTP.verified == False,
+        EmailOTP.used == False
+    ).order_by(
+        EmailOTP.created_at.desc()
+    ).first()
+
+    if not otp_record:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid OTP"
+        )
+
+    if datetime.utcnow() > otp_record.expires_at:
+        raise HTTPException(
+            status_code=400,
+            detail="OTP has expired"
+        )
+
+    otp_record.verified = True
+
+    db.commit()
+
+    return {
+        "message": "Email verified successfully"
+    }
+
+class SendOTPRequest(BaseModel):
+    email: str
+
+
+@router.post("/send-otp")
+async def send_otp(
+    otp_data: SendOTPRequest,
+    db: Session = Depends(get_db)
+):
+    # Check whether email is already registered
+    existing_user = db.query(User).filter(
+        User.email == otp_data.email
+    ).first()
+
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="Email is already registered"
+        )
+
+    # Generate OTP
+    otp = generate_otp()
+
+    # Save OTP
+    otp_record = EmailOTP(
+        email=otp_data.email,
+        otp=otp,
+        expires_at=datetime.utcnow() + timedelta(minutes=10),
+        verified=False,
+        used=False
+    )
+
+    db.add(otp_record)
+    db.commit()
+
+    # Send OTP
+    await send_otp_email(
+        otp_data.email,
+        otp
+    )
+
+    return {
+        "message": "OTP sent successfully"
+    }
