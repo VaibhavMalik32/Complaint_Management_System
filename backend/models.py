@@ -14,6 +14,8 @@ class User(Base):
     address = Column(String(255), nullable=False)
     city = Column(String(100), nullable=False)
     state = Column(String(100), nullable=False)
+    department = Column(String(100),nullable=True)
+    post = Column(String(50),default="user",nullable=False)
     hashed_password = Column(String(255), nullable=False)
     disabled = Column(Boolean, default=False)
     role = Column(String(20),default="user",nullable=False)
@@ -26,14 +28,12 @@ class Complaint(Base):
     title = Column(String(200),nullable = False)
     description = Column(Text,nullable = False)
     category = Column(String(100), nullable=False)
+    location = Column(String(200),nullable=False)
     status = Column(String(50),default="In Review",nullable=False)
     created_at = Column(DateTime,server_default=func.now()) #func.now() gets the database server's current time
     updated_at = Column(DateTime,server_default=func.now(),onupdate=func.now())
-    images = relationship(
-        "ComplaintImage",
-        back_populates="complaint",
-        cascade="all, delete-orphan"
-    )
+    images = relationship("ComplaintImage",back_populates="complaint",cascade="all, delete-orphan")
+    action = relationship("ComplaintAction",back_populates="complaint",cascade="all, delete-orphan",uselist=False)
 
 class ComplaintUpdate(Base):
     __tablename__ = "complaint_updates"
@@ -47,35 +47,13 @@ class ComplaintUpdate(Base):
 class EmailOTP(Base):
     __tablename__ = "email_otps"
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(
-        Integer,
-        ForeignKey("users.user_id"),
-        nullable=True
-    )
-    email = Column(
-        String(100),
-        nullable=False
-    )
-    otp = Column(
-        String(6),
-        nullable=False
-    )
-    expires_at = Column(
-        DateTime,
-        nullable=False
-    )
-    verified = Column(
-        Boolean,
-        default=False
-    )
-    used = Column(
-        Boolean,
-        default=False
-    )
-    created_at = Column(
-        DateTime,
-        server_default=func.now()
-    )
+    user_id = Column(Integer,ForeignKey("users.user_id"),nullable=True)
+    email = Column(String(100),nullable=False)
+    otp = Column(String(6),nullable=False)
+    expires_at = Column(DateTime,nullable=False)
+    verified = Column(Boolean,default=False)
+    used = Column(Boolean,default=False)
+    created_at = Column(DateTime,server_default=func.now())
 
 class ComplaintImage(Base):
     __tablename__ = "complaint_images"
@@ -86,3 +64,13 @@ class ComplaintImage(Base):
         "Complaint",
         back_populates="images"
     )
+
+class ComplaintAction(Base):
+    __tablename__ = "complaint_actions"
+    action_id = Column(Integer, primary_key=True, index=True)
+    complaint_id = Column(Integer, ForeignKey("complaints.complaint_id"), nullable=False)
+    employee_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    action_taken = Column(Text, nullable=False)
+    proof_image = Column(String(255), nullable=True)
+    created_at = Column(DateTime, server_default=func.now())
+    complaint = relationship("Complaint", back_populates="action")

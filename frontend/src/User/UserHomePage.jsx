@@ -104,7 +104,7 @@ function UserDashboard() {
                         className="border-b"
                       >
                         <td className="px-5 py-4">
-                          #{complaint.complaint_id}
+                          {complaint.complaint_id}
                         </td>
                         <td className="px-5 py-4">
                           {complaint.title}

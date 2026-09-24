@@ -68,10 +68,7 @@ function ComplaintDetails() {
           <div className="pt-6">
             <div className="mb-5">
               <p className="font-semibold">
-                Category
-              </p>
-              <p className="mt-1">
-                {complaint.category}
+                Category - {complaint.category}
               </p>
             </div>
             <div className="mb-5">
@@ -84,10 +81,7 @@ function ComplaintDetails() {
             </div>
             <div className="mb-5">
               <p className="font-semibold">
-                Submitted On
-              </p>
-              <p className="mt-1">
-                {complaint.created_at
+                Submitted On - {complaint.created_at
                   ? new Date(
                       complaint.created_at
                     ).toLocaleDateString()

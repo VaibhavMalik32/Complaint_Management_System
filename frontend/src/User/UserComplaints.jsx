@@ -143,18 +143,27 @@ function UserComplaints() {
                       : "N/A"}
                   </p>
                   <div className="flex gap-3">
+                    {complaint.status === "Resolved" && (
+                      <button
+                        onClick={() =>
+                          navigate(`/home/complaints/${complaint.complaint_id}/action`)
+                        }
+                        className="rounded-xl border border-green-600 px-5 py-3 font-medium text-green-600"
+                      >
+                        Action
+                      </button>
+                    )}
                     <button
                       onClick={() =>
                         navigate(`/home/complaints/${complaint.complaint_id}`)
                       }
-                      className="rounded-xl border px-5 py-3 font-medium text-white bg-black cursor-pointer"
+                      className="rounded-xl border px-5 py-3 font-medium text-black cursor-pointer"
                     >
                       View
                     </button>
-
                     <button
                       onClick={() => handleDelete(complaint.complaint_id)}
-                      className="rounded-xl border border-red-500 px-5 py-3 font-medium text-red-600 transition hover:bg-red-50"
+                      className="rounded-xl border border-red-500 px-5 py-3 font-medium text-red-600"
                     >
                       Delete
                     </button>

@@ -48,6 +48,7 @@ class ComplaintResponse(BaseModel):
     title: str
     description: str
     category: str
+    location: str
     status: str
     created_at: datetime | None = None
     updated_at: datetime | None = None
@@ -78,3 +79,23 @@ class ComplaintStatusUpdate(BaseModel):
 
 class ComplaintAssign(BaseModel):
     employee_id: int
+
+
+class StaffCreate(BaseModel):
+    username: str
+    full_name: str
+    email: EmailStr
+    password: str
+    phone: str
+    address: str
+    city: str
+    state: str
+    department: str
+    post: str
+
+class StaffTransfer(BaseModel):
+    address: str
+    city: str
+    state: str
+    department: str
+    post: str

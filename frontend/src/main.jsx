@@ -21,6 +21,12 @@ import SuperAdminLayout from './Super_Admin/SuperAdminLayout.jsx'
 import SuperAdminDashboard from './Super_Admin/SuperAdminDashboard.jsx'
 import EmployeeDashboard from './Employee/EmployeeDashboard.jsx'
 import ComplaintDetails from './User/ComplaintDetails.jsx'
+import UserAction from './User/UserAction.jsx'
+import ComplaintAction from './Employee/ComplaintAction.jsx'
+import AllComplaints from './Super_Admin/AllComplaints.jsx'
+import System from './Super_Admin/System.jsx'
+import AdminComplaints from './Admin/AdminComplaints.jsx'
+import AdminComplaintDetails from './Admin/AdminComplaintDetails.jsx'
 
 const router = createBrowserRouter([
   {
@@ -58,6 +64,10 @@ const router = createBrowserRouter([
             path: "complaints/:complaintId",
             element: <ComplaintDetails />,
           },
+          {
+            path: "complaints/:complaintId/action",
+            element: <UserAction />,
+          },
         ],
       },
     ],
@@ -73,6 +83,14 @@ const router = createBrowserRouter([
             path: "",
             element: <AdminDashboard />,
           },
+          {
+            path:"complaints",
+            element:<AdminComplaints/>
+          },
+          {
+            path:"complaints/:complaintId",
+            element:<AdminComplaintDetails/>
+          }
         ],
       },
     ],
@@ -87,6 +105,10 @@ const router = createBrowserRouter([
           {
             path: "",
             element: <EmployeeDashboard />,
+          },
+          {
+            path: "complaint-action",
+            element: <ComplaintAction />,
           },
         ],
       },
@@ -103,6 +125,14 @@ const router = createBrowserRouter([
             path: "",
             element: <SuperAdminDashboard />,
           },
+          {
+            path:"complaints",
+            element:<AllComplaints/>
+          },
+          {
+            path:"system",
+            element:<System/>
+          }
         ],
       },
     ],
