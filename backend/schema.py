@@ -25,6 +25,8 @@ class UserResponse(UserBase):
     user_id: int
     disabled: bool
     role:str
+    department: str
+    post: str
     class Config: #config tells pydantic how it should behave
         from_attributes = True #it tells pydantic that it can read values from object's attributes
 
