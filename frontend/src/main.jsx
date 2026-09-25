@@ -27,6 +27,10 @@ import AllComplaints from './Super_Admin/AllComplaints.jsx'
 import System from './Super_Admin/System.jsx'
 import AdminComplaints from './Admin/AdminComplaints.jsx'
 import AdminComplaintDetails from './Admin/AdminComplaintDetails.jsx'
+import AddEmployee from './Admin/AddEmployee.jsx'
+import ManageEmployees from './Admin/ManageEmployees.jsx'
+import AddAdmin from './Super_Admin/AddAdmin.jsx'
+import ManageAdmins from './Super_Admin/ManageAdmins.jsx'
 
 const router = createBrowserRouter([
   {
@@ -90,6 +94,14 @@ const router = createBrowserRouter([
           {
             path:"complaints/:complaintId",
             element:<AdminComplaintDetails/>
+          },
+          {
+            path:"add-employee",
+            element:<AddEmployee/>
+          },
+          {
+            path:"manage-employee",
+            element:<ManageEmployees/>
           }
         ],
       },
@@ -132,6 +144,14 @@ const router = createBrowserRouter([
           {
             path:"system",
             element:<System/>
+          },
+          {
+            path:"add-admin",
+            element:<AddAdmin/>
+          },
+          {
+            path:"manage-admins",
+            element:<ManageAdmins/>
           }
         ],
       },

@@ -121,18 +121,20 @@ function Register() {
 
   return (
     <div className="flex">
-      <div className="h-120 w-full justify-center items-center flex">
-        <div className="-mt-20">
+      <div className="h-120 w-full justify-center items-center flex ml-20">
+        <div>
           <h1 className="text-4xl font-bold">Complaint Management System</h1><br />
-          <p className="text-xl">Register, Submit and Track your Complaints</p><br />
-          <ol className="list-decimal">
-            <li>Submit Complaints</li>
-            <li>Track and see Complaints Status</li>
-            <li>View Actions on Complaints</li>
-          </ol>
+          <h1 className="text-xl">A centralized platform to submit, manage and track complaints efficiently.</h1><br />
+          <p className="">Our Complaint Management System provides a simple and organized way for users to register complaints, track their status, and receive updates until resolution.</p><br />
+          <ul className="list-disc ml-4">
+            <li>Submit Complaints - Register complaints with relevant details and supporting images.</li>
+            <li>Track Progress - Monitor the status and history of complaints.</li>
+            <li>Department Management - Complaints are handled by the appropriate departments and assigned employees.</li>
+            <li>Resolution - View actions taken and track complaints through resolution.</li>
+          </ul>
         </div>
       </div>
-      <div className="h-120 w-full justify-center items-center flex mt-25 -ml-50">
+      <div className="h-120 w-full justify-center items-center flex mt-25 ">
         <div className="h-auto w-100 border rounded-2xl p-5">
           <h1 className="text-center font-bold text-3xl mt-2 mb-6">
             Register Form

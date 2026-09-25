@@ -1,5 +1,5 @@
 from datetime import datetime, timedelta, timezone #timedelta represents a time duration
-from jose import jwt, JWTError
+from jose import jwt, JWTError #jwt creates jwt tokens and jwterror for handlind jwt related errors
 from passlib.context import CryptContext
 import os
 from dotenv import load_dotenv
@@ -11,7 +11,7 @@ ALGORITHM = os.getenv("ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES"))
 pwd_context = CryptContext( #creates the password hashing configuration
     schemes=["bcrypt"],
-    deprecated="auto"
+    deprecated="auto" #to automatically handle the deprecation status of password-hashing schemes
 )
 
 def verify_password(plain_password, hashed_password):

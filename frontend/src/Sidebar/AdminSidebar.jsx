@@ -25,7 +25,17 @@ function AdminSidebar() {
             className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
             Complaints</NavLink>
         </div>
-        <div className="h-20 justify-center items-center flex mt-112">
+        <div className="h-10 border justify-center items-center flex cursor-pointer">
+          <NavLink to="/admin/add-employee" end
+            className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
+            Add Employee</NavLink>
+        </div>
+        <div className="h-10 border justify-center items-center flex cursor-pointer">
+          <NavLink to="/admin/manage-employee" end
+            className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
+            Manage Employee</NavLink>
+        </div>
+        <div className="h-20 justify-center items-center flex mt-90">
           <div>
             <button className="outline rounded-xl text-red-600 w-20 cursor-pointer" onClick={logout}>
               Log Out

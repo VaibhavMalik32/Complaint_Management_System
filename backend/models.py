@@ -1,6 +1,6 @@
 from sqlalchemy import Column,Integer,String,Boolean,ForeignKey,Text,DateTime
 from sqlalchemy.sql import func
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship #to create relationship between models
 from db import Base
 
 class User(Base):
@@ -32,8 +32,8 @@ class Complaint(Base):
     status = Column(String(50),default="In Review",nullable=False)
     created_at = Column(DateTime,server_default=func.now()) #func.now() gets the database server's current time
     updated_at = Column(DateTime,server_default=func.now(),onupdate=func.now())
-    images = relationship("ComplaintImage",back_populates="complaint",cascade="all, delete-orphan")
-    action = relationship("ComplaintAction",back_populates="complaint",cascade="all, delete-orphan",uselist=False)
+    images = relationship("ComplaintImage",back_populates="complaint",cascade="all, delete-orphan") #means if the complaint is deleted, its associated image records are also deleted
+    action = relationship("ComplaintAction",back_populates="complaint",cascade="all, delete-orphan",uselist=False) #means one complaint has one action record rather than a list of actions
 
 class ComplaintUpdate(Base):
     __tablename__ = "complaint_updates"
@@ -62,7 +62,7 @@ class ComplaintImage(Base):
     image_path = Column(String(255), nullable=False)
     complaint = relationship(
         "Complaint",
-        back_populates="images"
+        back_populates="images" #connects the image back to its complaint
     )
 
 class ComplaintAction(Base):

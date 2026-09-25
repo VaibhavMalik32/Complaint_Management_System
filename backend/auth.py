@@ -11,6 +11,9 @@ from security import (
     get_password_hash,
     create_access_token
 )
+from dependencies import(
+    get_current_user
+)
 from pydantic import BaseModel
 import secrets
 
@@ -19,39 +22,26 @@ router = APIRouter(
     tags=["Authentication"]
 )
 
-def generate_otp():
+def generate_otp(): #generates a random six-digit number
     return str(secrets.randbelow(900000)+100000)
 
 
 @router.post("/register", response_model=UserResponse)
-async def register(
-    user_data: UserCreate,
-    db: Session = Depends(get_db)
-):
-    existing_user = db.query(User).filter(
-        User.username == user_data.username
-    ).first()
+async def register(user_data: UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.username == user_data.username).first()
     if existing_user:
         raise HTTPException(
             status_code=400,
             detail="Username already exists"
         )
-    existing_email = db.query(User).filter(
-        User.email == user_data.email
-    ).first()
+    existing_email = db.query(User).filter(User.email == user_data.email).first()
     if existing_email:
         raise HTTPException(
             status_code=400,
             detail="Email already exists"
         )
     
-    verified_otp = db.query(EmailOTP).filter(
-        EmailOTP.email == user_data.email,
-        EmailOTP.verified == True,
-        EmailOTP.used == False
-    ).order_by(
-        EmailOTP.created_at.desc()
-    ).first()
+    verified_otp = db.query(EmailOTP).filter(EmailOTP.email == user_data.email,EmailOTP.verified == True,EmailOTP.used == False).order_by(EmailOTP.created_at.desc()).first()
 
     if not verified_otp:
         raise HTTPException(
@@ -125,7 +115,6 @@ def login(
 def logout():
     return {"message": "Successfully logged out"}
 
-
 class OTPVerify(BaseModel):
     email: str
     otp: str
@@ -167,7 +156,6 @@ def verify_otp(
 class SendOTPRequest(BaseModel):
     email: str
 
-
 @router.post("/send-otp")
 async def send_otp(
     otp_data: SendOTPRequest,
@@ -208,3 +196,9 @@ async def send_otp(
     return {
         "message": "OTP sent successfully"
     }
+
+@router.get("/me", response_model=UserResponse)
+def get_me(
+    current_user: User = Depends(get_current_user)
+):
+    return current_user

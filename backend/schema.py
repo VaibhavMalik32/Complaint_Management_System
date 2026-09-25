@@ -1,3 +1,4 @@
+#this file defines the format of API data
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Literal #lets to restrict a field to specific values
@@ -14,7 +15,6 @@ class UserCreate(UserBase):
     full_name: str
     email: EmailStr
     password: str
-
     phone: str
     address: str
     city: str
@@ -25,6 +25,8 @@ class UserResponse(UserBase):
     user_id: int
     disabled: bool
     role:str
+    department: str
+    post: str
     class Config: #config tells pydantic how it should behave
         from_attributes = True #it tells pydantic that it can read values from object's attributes
 
@@ -79,7 +81,6 @@ class ComplaintStatusUpdate(BaseModel):
 
 class ComplaintAssign(BaseModel):
     employee_id: int
-
 
 class StaffCreate(BaseModel):
     username: str

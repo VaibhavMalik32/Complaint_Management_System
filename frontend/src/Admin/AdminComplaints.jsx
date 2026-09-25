@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function AdminComplaints() {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -13,10 +14,14 @@ function AdminComplaints() {
 
   const fetchComplaints = async () => {
     try {
+      setLoading(true);
+      setError("");
+
       const data = await getAdminComplaints();
       setComplaints(data);
     } catch (error) {
       console.error(error);
+      setError(error.message);
     } finally {
       setLoading(false);
     }
@@ -41,24 +46,40 @@ function AdminComplaints() {
   if (loading) {
     return (
       <div className="flex-1 min-h-screen bg-gray-50 p-8">
-        <p className="text-gray-500">Loading complaints...</p>
+        <p className="text-gray-500">
+          Loading complaints...
+        </p>
       </div>
     );
   }
 
   return (
     <div className="flex-1 min-h-screen bg-gray-50 p-8">
+
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-800">
-            Complaints
+          Complaints
         </h1>
+
+        <p className="mt-2 text-gray-500">
+          Complaints available for your department and location
+        </p>
       </div>
+
+      {error && (
+        <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-600">
+          {error}
+        </div>
+      )}
 
       <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
+
           <table className="w-full">
+
             <thead className="bg-gray-100">
               <tr>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
                 </th>
@@ -69,6 +90,10 @@ function AdminComplaints() {
 
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Category
+                </th>
+
+                <th className="px-6 py-4 text-left text-sm font-semibold">
+                  Location
                 </th>
 
                 <th className="px-6 py-4 text-left text-sm font-semibold">
@@ -86,17 +111,19 @@ function AdminComplaints() {
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Action
                 </th>
+
               </tr>
             </thead>
 
             <tbody>
+
               {complaints.length === 0 ? (
                 <tr>
                   <td
-                    colSpan="7"
+                    colSpan="8"
                     className="px-6 py-10 text-center text-gray-500"
                   >
-                    No complaints found for your area
+                    No complaints found for your department and location
                   </td>
                 </tr>
               ) : (
@@ -105,6 +132,7 @@ function AdminComplaints() {
                     key={complaint.complaint_id}
                     className="border-t hover:bg-gray-50"
                   >
+
                     <td className="px-6 py-4">
                       {complaint.complaint_id}
                     </td>
@@ -115,6 +143,10 @@ function AdminComplaints() {
 
                     <td className="px-6 py-4">
                       {complaint.category}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      {complaint.location || "N/A"}
                     </td>
 
                     <td className="px-6 py-4">
@@ -157,13 +189,18 @@ function AdminComplaints() {
                         View
                       </button>
                     </td>
+
                   </tr>
                 ))
               )}
+
             </tbody>
+
           </table>
+
         </div>
       </div>
+
     </div>
   );
 }

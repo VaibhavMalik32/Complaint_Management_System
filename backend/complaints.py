@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 import os
-import uuid
+import uuid #to generate unique filenames
 from sqlalchemy.orm import Session
 from sqlalchemy import or_
 
@@ -22,7 +22,7 @@ router = APIRouter(
     tags=["Complaints"]
 )
 
-CATEGORY_DEPARTMENT_MAP = {
+CATEGORY_DEPARTMENT_MAP = { #allow the system to automatically determine the relevant department
     "Fraud & Suspicious Activity": "Crime",
     "Harassment & Misconduct": "Crime",
     "Public Safety": "Crime",
@@ -49,7 +49,6 @@ CATEGORY_DEPARTMENT_MAP = {
     "Policy & Procedure Issues": "Administration",
     "Documentation & Records": "Administration"
 }
-
 
 def get_department_from_category(category: str):
     return CATEGORY_DEPARTMENT_MAP.get(category)
@@ -132,8 +131,8 @@ async def create_complaint(
             unique_name
         )
 
-        with open(file_path, "wb") as buffer:
-            buffer.write(await image.read())
+        with open(file_path, "wb") as buffer: #opens the destination file
+            buffer.write(await image.read()) #reads the uploaded image and writes it to disk
 
         complaint_image = ComplaintImage(
             complaint_id=complaint.complaint_id,
@@ -153,15 +152,7 @@ def get_my_complaints(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaints = (
-        db.query(Complaint)
-        .filter(
-            Complaint.user_id == current_user.user_id
-        )
-        .order_by(Complaint.created_at.desc())
-        .all()
-    )
-
+    complaints = (db.query(Complaint).filter(Complaint.user_id == current_user.user_id).order_by(Complaint.created_at.desc()).all())
     return complaints
 
 
@@ -215,11 +206,7 @@ def get_all_complaints(
             detail="Admin access is required"
         )
 
-    complaints = (
-        db.query(Complaint)
-        .order_by(Complaint.created_at.desc())
-        .all()
-    )
+    complaints = (db.query(Complaint).order_by(Complaint.created_at.desc()).all())
 
     complaints = [
         complaint
@@ -247,14 +234,7 @@ def get_assigned_complaints(
             detail="Employee access is required"
         )
 
-    complaints = (
-        db.query(Complaint)
-        .filter(
-            Complaint.employee_id == current_user.user_id
-        )
-        .order_by(Complaint.created_at.desc())
-        .all()
-    )
+    complaints = (db.query(Complaint).filter(Complaint.employee_id == current_user.user_id).order_by(Complaint.created_at.desc()).all())
 
     return complaints
 
@@ -301,13 +281,7 @@ def assign_complaint(
             detail="Admin access is required"
         )
 
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -334,14 +308,7 @@ def assign_complaint(
             detail="This complaint does not belong to your location"
         )
 
-    employee = (
-        db.query(User)
-        .filter(
-            User.user_id == assign_data.employee_id,
-            User.role == "employee"
-        )
-        .first()
-    )
+    employee = (db.query(User).filter(User.user_id == assign_data.employee_id,User.role == "employee").first())
 
     if not employee:
         raise HTTPException(
@@ -386,13 +353,7 @@ def update_complaint_status(
             detail="Admin or employee access is required"
         )
 
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -451,14 +412,7 @@ def delete_complaint(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id,
-            Complaint.user_id == current_user.user_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id,Complaint.user_id == current_user.user_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -480,14 +434,7 @@ def get_complaint_history(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id,
-            Complaint.user_id == current_user.user_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id,Complaint.user_id == current_user.user_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -495,16 +442,7 @@ def get_complaint_history(
             detail="Complaint not found"
         )
 
-    updates = (
-        db.query(ComplaintUpdate)
-        .filter(
-            ComplaintUpdate.complaint_id == complaint_id
-        )
-        .order_by(
-            ComplaintUpdate.updated_at.asc()
-        )
-        .all()
-    )
+    updates = (db.query(ComplaintUpdate).filter(ComplaintUpdate.complaint_id == complaint_id).order_by(ComplaintUpdate.updated_at.asc()).all())
 
     return updates
 
@@ -521,13 +459,7 @@ def get_admin_complaint(
             detail="Admin access is required"
         )
 
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -563,14 +495,7 @@ def get_complaint(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id,
-            Complaint.user_id == current_user.user_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id,Complaint.user_id == current_user.user_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -595,13 +520,7 @@ async def add_complaint_action(
             detail="Employee access is required"
         )
 
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -615,13 +534,7 @@ async def add_complaint_action(
             detail="This complaint is not assigned to you"
         )
 
-    existing_action = (
-        db.query(ComplaintAction)
-        .filter(
-            ComplaintAction.complaint_id == complaint_id
-        )
-        .first()
-    )
+    existing_action = (db.query(ComplaintAction).filter(ComplaintAction.complaint_id == complaint_id).first())
 
     if existing_action:
         raise HTTPException(
@@ -648,10 +561,7 @@ async def add_complaint_action(
         upload_dir = "uploads/actions"
         os.makedirs(upload_dir, exist_ok=True)
 
-        extension = os.path.splitext(
-            proof_image.filename
-        )[1]
-
+        extension = os.path.splitext(proof_image.filename)[1]
         filename = f"{uuid.uuid4()}{extension}"
 
         file_path = os.path.join(
@@ -694,14 +604,7 @@ def get_complaint_action(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id,
-            Complaint.user_id == current_user.user_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id,Complaint.user_id == current_user.user_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -709,13 +612,7 @@ def get_complaint_action(
             detail="Complaint not found"
         )
 
-    action = (
-        db.query(ComplaintAction)
-        .filter(
-            ComplaintAction.complaint_id == complaint_id
-        )
-        .first()
-    )
+    action = (db.query(ComplaintAction).filter(ComplaintAction.complaint_id == complaint_id).first())
 
     if not action:
         raise HTTPException(
@@ -737,13 +634,7 @@ def get_super_admin_complaints(
             detail="Super Admin access is required"
         )
 
-    complaints = (
-        db.query(Complaint)
-        .order_by(
-            Complaint.created_at.desc()
-        )
-        .all()
-    )
+    complaints = (db.query(Complaint).order_by(Complaint.created_at.desc()).all())
 
     return complaints
 
@@ -760,13 +651,7 @@ def get_super_admin_complaint_action(
             detail="Super Admin access is required"
         )
 
-    complaint = (
-        db.query(Complaint)
-        .filter(
-            Complaint.complaint_id == complaint_id
-        )
-        .first()
-    )
+    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id).first())
 
     if not complaint:
         raise HTTPException(
@@ -774,13 +659,7 @@ def get_super_admin_complaint_action(
             detail="Complaint not found"
         )
 
-    action = (
-        db.query(ComplaintAction)
-        .filter(
-            ComplaintAction.complaint_id == complaint_id
-        )
-        .first()
-    )
+    action = (db.query(ComplaintAction).filter(ComplaintAction.complaint_id == complaint_id).first())
 
     if not action:
         raise HTTPException(
@@ -802,12 +681,7 @@ def get_super_admin_users(
             detail="Super Admin access is required"
         )
 
-    users = (
-        db.query(User)
-        .filter(User.role == "user")
-        .order_by(User.user_id.desc())
-        .all()
-    )
+    users = (db.query(User).filter(User.role == "user").order_by(User.user_id.desc()).all())
 
     return users
 
@@ -823,12 +697,7 @@ def get_super_admin_employees(
             detail="Super Admin access is required"
         )
 
-    employees = (
-        db.query(User)
-        .filter(User.role == "employee")
-        .order_by(User.user_id.desc())
-        .all()
-    )
+    employees = (db.query(User).filter(User.role == "employee").order_by(User.user_id.desc()).all())
 
     return employees
 
@@ -844,12 +713,7 @@ def get_super_admin_admins(
             detail="Super Admin access is required"
         )
 
-    admins = (
-        db.query(User)
-        .filter(User.role == "admin")
-        .order_by(User.user_id.desc())
-        .all()
-    )
+    admins = (db.query(User).filter(User.role == "admin").order_by(User.user_id.desc()).all())
 
     return admins
 
@@ -865,13 +729,7 @@ def get_all_complaints_super_admin(
             detail="Super Admin access is required"
         )
 
-    complaints = (
-        db.query(Complaint)
-        .order_by(
-            Complaint.created_at.desc()
-        )
-        .all()
-    )
+    complaints = (db.query(Complaint).order_by(Complaint.created_at.desc()).all())
 
     return complaints
 
@@ -887,60 +745,21 @@ def get_super_admin_stats(
             detail="Super Admin access is required"
         )
 
-    total_users = (
-        db.query(User)
-        .filter(User.role == "user")
-        .count()
-    )
+    total_users = (db.query(User).filter(User.role == "user").count())
 
-    total_employees = (
-        db.query(User)
-        .filter(User.role == "employee")
-        .count()
-    )
+    total_employees = (db.query(User).filter(User.role == "employee").count())
 
-    total_admins = (
-        db.query(User)
-        .filter(User.role == "admin")
-        .count()
-    )
+    total_admins = (db.query(User).filter(User.role == "admin").count())
 
-    total_complaints = (
-        db.query(Complaint)
-        .count()
-    )
+    total_complaints = (db.query(Complaint).count())
 
-    in_review = (
-        db.query(Complaint)
-        .filter(
-            Complaint.status == "In Review"
-        )
-        .count()
-    )
+    in_review = (db.query(Complaint).filter(Complaint.status == "In Review").count())
 
-    in_progress = (
-        db.query(Complaint)
-        .filter(
-            Complaint.status == "In Progress"
-        )
-        .count()
-    )
+    in_progress = (db.query(Complaint).filter(Complaint.status == "In Progress").count())
 
-    resolved = (
-        db.query(Complaint)
-        .filter(
-            Complaint.status == "Resolved"
-        )
-        .count()
-    )
+    resolved = (db.query(Complaint).filter(Complaint.status == "Resolved").count())
 
-    rejected = (
-        db.query(Complaint)
-        .filter(
-            Complaint.status == "Rejected"
-        )
-        .count()
-    )
+    rejected = (db.query(Complaint).filter(Complaint.status == "Rejected").count())
 
     return {
         "total_users": total_users,
@@ -966,16 +785,7 @@ def create_admin(
             detail="Super Admin access is required"
         )
 
-    existing_user = (
-        db.query(User)
-        .filter(
-            or_(
-                User.username == staff_data.username,
-                User.email == staff_data.email
-            )
-        )
-        .first()
-    )
+    existing_user = (db.query(User).filter(or_(User.username == staff_data.username,User.email == staff_data.email)).first())
 
     if existing_user:
         raise HTTPException(
@@ -1029,14 +839,7 @@ def transfer_admin(
             detail="Super Admin access is required"
         )
 
-    admin = (
-        db.query(User)
-        .filter(
-            User.user_id == admin_id,
-            User.role == "admin"
-        )
-        .first()
-    )
+    admin = (db.query(User).filter(User.user_id == admin_id,User.role == "admin").first())
 
     if not admin:
         raise HTTPException(
@@ -1076,14 +879,7 @@ def remove_admin(
             detail="Super Admin access is required"
         )
 
-    admin = (
-        db.query(User)
-        .filter(
-            User.user_id == admin_id,
-            User.role == "admin"
-        )
-        .first()
-    )
+    admin = (db.query(User).filter(User.user_id == admin_id,User.role == "admin").first())
 
     if not admin:
         raise HTTPException(
@@ -1115,16 +911,7 @@ def create_employee(
             detail="Admin access is required"
         )
 
-    existing_user = (
-        db.query(User)
-        .filter(
-            or_(
-                User.username == staff_data.username,
-                User.email == staff_data.email
-            )
-        )
-        .first()
-    )
+    existing_user = (db.query(User).filter(or_(User.username == staff_data.username,User.email == staff_data.email)).first())
 
     if existing_user:
         raise HTTPException(
@@ -1184,14 +971,7 @@ def transfer_employee(
             detail="Admin access is required"
         )
 
-    employee = (
-        db.query(User)
-        .filter(
-            User.user_id == employee_id,
-            User.role == "employee"
-        )
-        .first()
-    )
+    employee = (db.query(User).filter(User.user_id == employee_id,User.role == "employee").first())
 
     if not employee:
         raise HTTPException(
@@ -1243,14 +1023,7 @@ def remove_employee(
             detail="Admin access is required"
         )
 
-    employee = (
-        db.query(User)
-        .filter(
-            User.user_id == employee_id,
-            User.role == "employee"
-        )
-        .first()
-    )
+    employee = (db.query(User).filter(User.user_id == employee_id,User.role == "employee").first())
 
     if not employee:
         raise HTTPException(

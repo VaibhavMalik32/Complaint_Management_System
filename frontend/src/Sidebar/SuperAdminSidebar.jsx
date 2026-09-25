@@ -26,11 +26,21 @@ function SuperAdminSidebar() {
             All Complaints</NavLink>
         </div>
         <div className="h-10 border justify-center items-center flex cursor-pointer">
+          <NavLink to="/super-admin/add-admin" end
+            className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
+            Add Admin</NavLink>
+        </div>
+        <div className="h-10 border justify-center items-center flex cursor-pointer">
+          <NavLink to="/super-admin/manage-admins" end
+            className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
+            Manage Admins</NavLink>
+        </div>
+        <div className="h-10 border justify-center items-center flex cursor-pointer">
           <NavLink to="/super-admin/system" end
             className={({ isActive }) => isActive ? "bg-black w-70 h-10 justify-center items-center flex text-white " : "bg-white"}>
             About System</NavLink>
         </div>
-        <div className="h-20 justify-center items-center flex mt-112">
+        <div className="h-20 justify-center items-center flex mt-80">
           <div>
             <button className="outline rounded-xl text-red-600 w-20 cursor-pointer" onClick={logout}>
               Log Out

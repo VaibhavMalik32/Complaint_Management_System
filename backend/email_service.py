@@ -7,22 +7,22 @@ load_dotenv()
 print("MAIL_USERNAME:", os.getenv("MAIL_USERNAME"))
 print("MAIL_PASSWORD EXISTS:", bool(os.getenv("MAIL_PASSWORD")))
 
-conf = ConnectionConfig(
+conf = ConnectionConfig( #creates the gmail smtp configuration(how the application connects to the email server)
     MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
     MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),
     MAIL_FROM=os.getenv("MAIL_USERNAME"),
-    MAIL_PORT=587,
-    MAIL_SERVER="smtp.gmail.com",
-    MAIL_STARTTLS=True,
-    MAIL_SSL_TLS=False,
-    USE_CREDENTIALS=True,
+    MAIL_PORT=587, #gmail smtp port
+    MAIL_SERVER="smtp.gmail.com", #gmail smtp server
+    MAIL_STARTTLS=True, #STARTTLS tells the SMTP connection to upgrade to an encrypted TLS connection
+    MAIL_SSL_TLS=False, #doesn't use direct SSL/TLS mode
+    USE_CREDENTIALS=True, #tells fastapi-mail to authenticate using the configured credentials
 )
 
 async def send_otp_email(
     email: EmailStr,
     otp: str
 ):
-    message = MessageSchema(
+    message = MessageSchema( #defines the email itself
         subject="Complaint Management System - Email Verification",
         recipients=[email],
         body=f"""
@@ -39,7 +39,7 @@ If you did not create an account, please ignore this email.
 Regards,
 Complaint Management System
 """,
-        subtype="plain",
+        subtype="plain", #tells the email library what type of content the body contains
     )
-    fm = FastMail(conf)
+    fm = FastMail(conf) #object that actually handles sending the email using your configured email server
     await fm.send_message(message)

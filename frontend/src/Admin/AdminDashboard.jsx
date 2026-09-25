@@ -6,8 +6,10 @@ import {
 } from "../api.js";
 
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
+  const navigate = useNavigate();
   const [complaints, setComplaints] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState({});

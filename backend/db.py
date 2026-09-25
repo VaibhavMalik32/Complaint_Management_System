@@ -1,5 +1,6 @@
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, declarative_base #to create db sessions
+#for connecting fastapi to mysql
+from sqlalchemy import create_engine #to create connection mechanism between sqlalchemy and mysql database
+from sqlalchemy.orm import sessionmaker, declarative_base #to create db sessions(object through which python talks to db)
 import os #to acess environment variables
 from dotenv import load_dotenv
 

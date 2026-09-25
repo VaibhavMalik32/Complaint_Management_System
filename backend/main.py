@@ -16,7 +16,7 @@ app.add_middleware(
     allow_methods=["*"], #to allow http methods
     allow_headers=["*"], #to allow http headers
 )
-app.mount(
+app.mount( #makes uploaded files accessible /uploads
     "/uploads",
     StaticFiles(directory="uploads"),
     name="uploads"

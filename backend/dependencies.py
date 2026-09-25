@@ -7,13 +7,12 @@ from db import get_db
 from models import User
 from security import SECRET_KEY, ALGORITHM
 
-
 oauth2_scheme = OAuth2PasswordBearer( #tells fastapi that authentication uses a bearer token
-    tokenUrl="/auth/login"
+    tokenUrl="/auth/login" #tells fastapi that your authentication uses an OAuth2 bearer-token flow and that /auth/login is the token endpoint
 )
 
 def get_current_user(
-    token: str = Depends(oauth2_scheme), #fastapi extracts the JWT from the authorization header
+    token: str = Depends(oauth2_scheme), #gets the token from the request
     db: Session = Depends(get_db)
 ):
     credentials_exception = HTTPException( #standard authentication error
