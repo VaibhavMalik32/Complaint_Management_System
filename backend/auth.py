@@ -6,14 +6,8 @@ from db import get_db
 from models import User,EmailOTP
 from email_service import send_otp_email
 from schema import UserCreate, UserResponse
-from security import (
-    verify_password,
-    get_password_hash,
-    create_access_token
-)
-from dependencies import(
-    get_current_user
-)
+from security import (verify_password,get_password_hash,create_access_token)
+from dependencies import(get_current_user)
 from pydantic import BaseModel
 import secrets
 import re

@@ -29,6 +29,8 @@ class Complaint(Base):
     description = Column(Text,nullable = False)
     category = Column(String(100), nullable=False)
     location = Column(String(200),nullable=False)
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
     status = Column(String(50),default="In Review",nullable=False)
     created_at = Column(DateTime,server_default=func.now()) #func.now() gets the database server's current time
     updated_at = Column(DateTime,server_default=func.now(),onupdate=func.now())
@@ -41,6 +43,9 @@ class ComplaintUpdate(Base):
     __tablename__ = "complaint_updates"
     update_id = Column(Integer, primary_key=True, index=True)
     complaint_id = Column(Integer,ForeignKey("complaints.complaint_id"),nullable=False)
+    assigned_to = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    performed_by = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    action = Column(String(100), nullable=True)
     updated_by = Column(Integer,ForeignKey("users.user_id"),nullable=False)
     old_status = Column(String(50), nullable=False)
     new_status = Column(String(50), nullable=False)
