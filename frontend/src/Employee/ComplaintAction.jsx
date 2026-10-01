@@ -9,18 +9,14 @@ function ComplaintAction() {
   const [selectedComplaint, setSelectedComplaint] = useState("");
   const [actionTaken, setActionTaken] = useState("");
   const [proofImage, setProofImage] = useState(null);
-
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
   const fetchComplaints = async () => {
     try {
       setLoading(true);
       setError("");
-
       const data = await getAssignedComplaints();
       setComplaints(data);
     } catch (err) {
@@ -29,50 +25,39 @@ function ComplaintAction() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchComplaints();
   }, []);
-
   const selectedComplaintData = complaints.find(
     (complaint) =>
       String(complaint.complaint_id) ===
       String(selectedComplaint)
   );
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setError("");
     setSuccess("");
-
     if (!selectedComplaint) {
       setError("Please select a complaint.");
       return;
     }
-
     if (!actionTaken.trim()) {
       setError("Please enter the action taken.");
       return;
     }
-
     setSubmitting(true);
-
     try {
       await addComplaintAction(
         selectedComplaint,
         actionTaken,
         proofImage
       );
-
       setSuccess(
         "Complaint action added successfully."
       );
-
       setSelectedComplaint("");
       setActionTaken("");
       setProofImage(null);
-
       await fetchComplaints();
     } catch (err) {
       setError(err.message);

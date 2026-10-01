@@ -14,7 +14,7 @@ from schema import (
     StaffCreate,
     StaffTransfer
 )
-from dependencies import get_current_user
+from dependencies import get_current_user   
 from security import get_password_hash
 
 router = APIRouter(
@@ -22,32 +22,39 @@ router = APIRouter(
     tags=["Complaints"]
 )
 
-CATEGORY_DEPARTMENT_MAP = { #allow the system to automatically determine the relevant department
-    "Fraud & Suspicious Activity": "Crime",
-    "Harassment & Misconduct": "Crime",
-    "Public Safety": "Crime",
-    "Technical": "IT",
-    "Internet Issues": "IT",
-    "Electrical": "Electricity",
-    "Plumbing": "Water",
-    "Road & Transportation": "Public Works",
-    "Parking Issues": "Public Works",
-    "Garbage Management": "Municipal",
-    "Cleanliness & Sanitation": "Municipal",
-    "Environmental Issues": "Environment",
-    "Public Facilities": "Municipal",
-    "Street Lighting": "Electricity",
-    "Administrative": "Administration",
-    "Staff/Employee Behaviour": "Administration",
-    "Customer Service": "Administration",
-    "Billing & Payment Issues": "Finance",
-    "Unauthorized Charges": "Finance",
-    "Product Issues": "Consumer Affairs",
-    "Service Quality": "Consumer Affairs",
-    "Delivery & Logistics": "Consumer Affairs",
-    "Accessibility Issues": "Administration",
-    "Policy & Procedure Issues": "Administration",
-    "Documentation & Records": "Administration"
+CATEGORY_DEPARTMENT_MAP = {
+    # State-Level Departments
+    "General Administration Department (GAD)": "Administration",
+    "Personnel and Administrative Reforms": "Administration",
+    "Law & Legislative Affairs": "Administration",
+    "Finance Department": "Finance",
+    "Excise and Taxation": "Finance",
+    "Industries and Commerce Department": "Consumer Affairs",
+    "Information Technology & Communications": "IT",
+    "Higher Education": "Administration",
+
+    # District-Level Departments
+    "Police Department": "Crime",
+    "Revenue and Land Records": "Finance",
+    "Public Works Department (PWD)": "Public Works",
+    "Transport Department (RTO)": "Public Works",
+    "Energy / Electricity Board": "Electricity",
+    "Public Health Engineering Department (PHED)": "Water",
+    "Health and Family Welfare Department": "Municipal",
+    "School Education & Literacy": "Administration",
+    "Women and Child Development": "Administration",
+    "Social Justice and Empowerment": "Administration",
+    "Backward Classes & Minorities Welfare": "Administration",
+    "Labour and Employment": "Administration",
+    "Food, Civil Supplies & Consumer Affairs": "Consumer Affairs",
+    "Panchayati Raj and Rural Development": "Municipal",
+    "Agriculture and Farmers Welfare Department": "Environment",
+    "Animal Husbandry, Dairying & Fisheries": "Environment",
+    "Forest, Wildlife & Climate Change": "Environment",
+    "New and Renewable Energy": "Electricity",
+    "Housing and Urban Development": "Municipal",
+    "Tourism and Cultural Affairs": "Administration",
+    "Sports and Youth Services": "Administration"
 }
 
 def get_department_from_category(category: str):
@@ -83,6 +90,8 @@ async def create_complaint(
     description: str = Form(...),
     category: str = Form(...),
     location: str = Form(...),
+    latitude: float | None = Form(None),
+    longitude: float | None = Form(None),
     images: list[UploadFile] = File(...),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
@@ -102,12 +111,27 @@ async def create_complaint(
         description=description,
         category=category,
         location=location,
+        latitude=latitude,
+        longitude=longitude,
         status="In Review"
     )
 
     db.add(complaint)
     db.commit()
     db.refresh(complaint)
+
+    history = ComplaintUpdate(
+        complaint_id=complaint.complaint_id,
+        updated_by=current_user.user_id,
+        performed_by=current_user.user_id,
+        assigned_to=None,
+        action="Complaint Submitted",
+        old_status="Created",
+        new_status="In Review"
+    )
+
+    db.add(history)
+    db.commit()
 
     allowed_types = [
         "image/jpeg",
@@ -153,7 +177,34 @@ def get_my_complaints(
     current_user: User = Depends(get_current_user)
 ):
     complaints = (db.query(Complaint).filter(Complaint.user_id == current_user.user_id).order_by(Complaint.created_at.desc()).all())
-    return complaints
+    result = []
+    for complaint in complaints:
+        employee_name = None
+        if complaint.employee_id:
+            employee = (
+                db.query(User)
+                .filter(
+                    User.user_id == complaint.employee_id
+                )
+                .first()
+            )
+            if employee:
+                employee_name = employee.full_name
+        result.append({
+            "complaint_id": complaint.complaint_id,
+            "user_id": complaint.user_id,
+            "employee_id": complaint.employee_id,
+            "employee_name": employee_name,
+            "title": complaint.title,
+            "description": complaint.description,
+            "category": complaint.category,
+            "location": complaint.location,
+            "status": complaint.status,
+            "created_at": complaint.created_at,
+            "updated_at": complaint.updated_at,
+            "images": complaint.images
+        })
+    return result
 
 
 @router.get("/admin/complaints", response_model=list[ComplaintResponse])
@@ -331,9 +382,22 @@ def assign_complaint(
             detail="Employee does not belong to the complaint location"
         )
 
+    old_status = complaint.status
+
     complaint.employee_id = employee.user_id
     complaint.status = "In Progress"
 
+    history = ComplaintUpdate(
+        complaint_id=complaint.complaint_id,
+        updated_by=current_user.user_id,
+        performed_by=current_user.user_id,
+        assigned_to=employee.user_id,
+        action="Assigned",
+        old_status=old_status,
+        new_status="In Progress"
+    )
+
+    db.add(history)
     db.commit()
     db.refresh(complaint)
 
@@ -392,9 +456,14 @@ def update_complaint_status(
 
     complaint.status = status_data.status
 
+    action = "Resolved" if status_data.status == "Resolved" else "Status Changed"
+
     update = ComplaintUpdate(
         complaint_id=complaint.complaint_id,
         updated_by=current_user.user_id,
+        performed_by=current_user.user_id,
+        assigned_to=complaint.employee_id,
+        action=action,
         old_status=old_status,
         new_status=status_data.status
     )
@@ -434,7 +503,14 @@ def get_complaint_history(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
-    complaint = (db.query(Complaint).filter(Complaint.complaint_id == complaint_id,Complaint.user_id == current_user.user_id).first())
+    complaint = (
+        db.query(Complaint)
+        .filter(
+            Complaint.complaint_id == complaint_id,
+            Complaint.user_id == current_user.user_id
+        )
+        .first()
+    )
 
     if not complaint:
         raise HTTPException(
@@ -442,9 +518,54 @@ def get_complaint_history(
             detail="Complaint not found"
         )
 
-    updates = (db.query(ComplaintUpdate).filter(ComplaintUpdate.complaint_id == complaint_id).order_by(ComplaintUpdate.updated_at.asc()).all())
+    updates = (
+        db.query(ComplaintUpdate)
+        .filter(ComplaintUpdate.complaint_id == complaint_id)
+        .order_by(ComplaintUpdate.updated_at.asc())
+        .all()
+    )
 
-    return updates
+    result = []
+
+    for update in updates:
+        assigned_employee = None
+        performed_user = None
+
+        if update.assigned_to:
+            assigned_employee = (
+                db.query(User)
+                .filter(User.user_id == update.assigned_to)
+                .first()
+            )
+
+        if update.performed_by:
+            performed_user = (
+                db.query(User)
+                .filter(User.user_id == update.performed_by)
+                .first()
+            )
+        else:
+            performed_user = (
+                db.query(User)
+                .filter(User.user_id == update.updated_by)
+                .first()
+            )
+
+        result.append({
+            "update_id": update.update_id,
+            "complaint_id": update.complaint_id,
+            "updated_by": update.updated_by,
+            "assigned_to": update.assigned_to,
+            "assigned_to_name": assigned_employee.full_name if assigned_employee else None,
+            "performed_by": update.performed_by,
+            "performed_by_name": performed_user.full_name if performed_user else None,
+            "action": update.action,
+            "old_status": update.old_status,
+            "new_status": update.new_status,
+            "updated_at": update.updated_at
+        })
+
+    return result
 
 
 @router.get("/admin/complaints/{complaint_id}", response_model=ComplaintResponse)
@@ -583,7 +704,21 @@ async def add_complaint_action(
         proof_image=proof_path
     )
 
+    old_status = complaint.status
+
     complaint.status = "Resolved"
+
+    history = ComplaintUpdate(
+        complaint_id=complaint.complaint_id,
+        updated_by=current_user.user_id,
+        performed_by=current_user.user_id,
+        assigned_to=current_user.user_id,
+        action="Resolved",
+        old_status=old_status,
+        new_status="Resolved"
+    )
+
+    db.add(history)
 
     db.add(action)
     db.commit()

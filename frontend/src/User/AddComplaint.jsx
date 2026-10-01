@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { createComplaint } from "../api.js";
+import LocationPicker from "./LocationPicker.jsx";
 
 function AddComplaint() {
   const navigate = useNavigate();
@@ -8,8 +9,11 @@ function AddComplaint() {
     title: "",
     description: "",
     category: "",
-    location: ""
+    location: "",
+    latitude: null,
+    longitude: null
   });
+  const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [customCategory, setCustomCategory] = useState("");
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -96,32 +100,94 @@ function AddComplaint() {
               required
             >
               <option value="">Select Category</option>
-              <option value="technical">Technical</option>
-              <option value="administrative">Administrative</option>
-              <option value="Maintenance">Maintenance</option>
-              <option value="Electrical">Electrical</option>
-              <option value="Plumbing">Plumbing</option>
-              <option value="Road & Transportation">Road & Transportation</option>
-              <option value="Garbage Management">Garbage Management</option>
-              <option value="Cleanliness & Sanitation">Cleanliness & Sanitation</option>
-              <option value="Public Safety">Public Safety</option>
-              <option value="Street Lighting">Street Lighting</option>
-              <option value="Environmental Issues">Environmental Issues</option>
-              <option value="Internet Issues">Internet Issues</option>
-              <option value="Staff/Employee Behaviour">Staff/Employee Behaviour</option>
-              <option value="Customer Service">Customer Service</option>
-              <option value="Billing & Payment Issues">Billing & Payment Issues</option>
-              <option value="Unauthorized Charges">Unauthorized Charges</option>
-              <option value="Product Issues">Product Issues</option>
-              <option value="Service Quality">Service Quality</option>
-              <option value="Delivery & Logistics">Delivery & Logistics</option>
-              <option value="Public Facilities">Public Facilities</option>
-              <option value="Parking Issues">Parking Issues</option>
-              <option value="Fraud & Suspicious Activity">Fraud & Suspicious Activity</option>
-              <option value="Harassment & Misconduct">Harassment & Misconduct</option>
-              <option value="Accessibility Issues">Accessibility Issues</option>
-              <option value="Policy & Procedure Issues">Policy & Procedure Issues</option>
-              <option value="Documentation & Records">Documentation & Records</option>
+              <option value="General Administration Department (GAD)">
+                General Administration Department (GAD)
+              </option>
+              <option value="Personnel and Administrative Reforms">
+                Personnel and Administrative Reforms
+              </option>
+              <option value="Law & Legislative Affairs">
+                Law & Legislative Affairs
+              </option>
+              <option value="Finance Department">
+                Finance Department
+              </option>
+              <option value="Excise and Taxation">
+                Excise and Taxation
+              </option>
+              <option value="Industries and Commerce Department">
+                Industries and Commerce Department
+              </option>
+              <option value="Information Technology & Communications">
+                Information Technology & Communications
+              </option>
+              <option value="Higher Education">
+                Higher Education
+              </option>
+
+              <option value="Police Department">
+                Police Department
+              </option>
+              <option value="Revenue and Land Records">
+                Revenue and Land Records
+              </option>
+              <option value="Public Works Department (PWD)">
+                Public Works Department (PWD)
+              </option>
+              <option value="Transport Department (RTO)">
+                Transport Department (RTO)
+              </option>
+              <option value="Energy / Electricity Board">
+                Energy / Electricity Board
+              </option>
+              <option value="Public Health Engineering Department (PHED)">
+                Public Health Engineering Department (PHED)
+              </option>
+              <option value="Health and Family Welfare Department">
+                Health and Family Welfare Department
+              </option>
+              <option value="School Education & Literacy">
+                School Education & Literacy
+              </option>
+              <option value="Women and Child Development">
+                Women and Child Development
+              </option>
+              <option value="Social Justice and Empowerment">
+                Social Justice and Empowerment
+              </option>
+              <option value="Backward Classes & Minorities Welfare">
+                Backward Classes & Minorities Welfare
+              </option>
+              <option value="Labour and Employment">
+                Labour and Employment
+              </option>
+              <option value="Food, Civil Supplies & Consumer Affairs">
+                Food, Civil Supplies & Consumer Affairs
+              </option>
+              <option value="Panchayati Raj and Rural Development">
+                Panchayati Raj and Rural Development
+              </option>
+              <option value="Agriculture and Farmers Welfare Department">
+                Agriculture and Farmers Welfare Department
+              </option>
+              <option value="Animal Husbandry, Dairying & Fisheries">
+                Animal Husbandry, Dairying & Fisheries
+              </option>
+              <option value="Forest, Wildlife & Climate Change">
+                Forest, Wildlife & Climate Change
+              </option>
+              <option value="New and Renewable Energy">
+                New and Renewable Energy
+              </option>
+              <option value="Housing and Urban Development">
+                Housing and Urban Development
+              </option>
+              <option value="Tourism and Cultural Affairs">
+                Tourism and Cultural Affairs
+              </option>
+              <option value="Sports and Youth Services">
+                Sports and Youth Services
+              </option>
               <option value="other">Other</option>
             </select>
             {formData.category === "other" && (
@@ -148,21 +214,57 @@ function AddComplaint() {
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="mb-5">
+            <label className="mb-2 block text-sm font-medium text-gray-700">
               Complaint Location
             </label>
 
-            <input
-              type="text"
-              name="location"
-              placeholder="Enter the location where the issue occurred"
-              value={formData.location}
-              onChange={handleChange}
-              className="w-full rounded-2xl border px-3 py-2 outline-none"
-              required
-            />
+            <button
+              type="button"
+              onClick={() => setShowLocationPicker(true)}
+              className="w-full rounded-2xl border border-gray-300 px-4 py-3 text-left transition hover:border-black hover:bg-gray-50"
+            >
+              {formData.location ? (
+                <div>
+                  <p className="font-medium text-gray-800">
+                    {formData.location}
+                  </p>
+
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formData.latitude?.toFixed(6)},{" "}
+                    {formData.longitude?.toFixed(6)}
+                  </p>
+                </div>
+              ) : (
+                <span className="text-gray-500">
+                  Select complaint location from map
+                </span>
+              )}
+            </button>
+
+            {formData.location && (
+              <button
+                type="button"
+                onClick={() => setShowLocationPicker(true)}
+                className="mt-2 text-sm font-medium text-blue-600 hover:underline"
+              >
+                Change Location
+              </button>
+            )}
           </div>
+          {showLocationPicker && (
+            <LocationPicker
+              onLocationSelect={(locationData) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  location: locationData.location,
+                  latitude: locationData.latitude,
+                  longitude: locationData.longitude
+                }));
+              }}
+              onClose={() => setShowLocationPicker(false)}
+            />
+          )}
           <div className="mb-5">
             <label className="mb-2 block font-medium text-gray-700">
               Evidence Images

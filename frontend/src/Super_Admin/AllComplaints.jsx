@@ -121,10 +121,10 @@ function AllComplaints() {
                   return (
                     <tr
                       key={complaint.complaint_id}
-                      className="border-t hover:bg-gray-50"
+                      className="border-t"
                     >
                       <td className="px-6 py-4">
-                        #{complaint.complaint_id}
+                        {complaint.complaint_id}
                       </td>
 
                       <td className="px-6 py-4 font-medium">
@@ -137,7 +137,7 @@ function AllComplaints() {
 
                       <td className="px-6 py-4">
                         {complaint.employee_id ? (
-                          `Employee #${complaint.employee_id}`
+                          `Employee ${complaint.employee_id}`
                         ) : (
                           <span className="text-gray-400">
                             Not Assigned
@@ -175,7 +175,7 @@ function AllComplaints() {
                         )}
                       </td>
 
-                      <td className="px-6 py-4 text-sm text-gray-500">
+                      <td className="px-6 py-4 text-sm text-black">
                         {complaint.created_at
                           ? new Date(
                               complaint.created_at
@@ -208,23 +208,22 @@ function AllComplaints() {
             </div>
 
             <div className="space-y-4">
-              <div>
-                <p className="text-sm text-gray-500">Complaint</p>
-                <p className="font-semibold">
-                  #{selectedComplaint.complaint.complaint_id}{" "}
+              <div className="flex">
+                <p className="text-sm font-bold text-black">Complaint - </p>
+                <p className="-mt-0.5 ml-1">
                   {selectedComplaint.complaint.title}
                 </p>
               </div>
 
-              <div>
-                <p className="text-sm text-gray-500">Employee</p>
-                <p>
-                  Employee #{selectedComplaint.action.employee_id}
+              <div className="flex">
+                <p className="text-sm font-bold text-black">Employee - </p>
+                <p className="-mt-0.5 ml-1">
+                  Employee {selectedComplaint.action.employee_id}
                 </p>
               </div>
 
               <div>
-                <p className="text-sm text-gray-500">Action Taken</p>
+                <p className="text-sm text-black font-bold">Action Taken</p>
                 <p className="mt-1 bg-gray-50 rounded-xl p-4">
                   {selectedComplaint.action.action_taken}
                 </p>
@@ -245,7 +244,7 @@ function AllComplaints() {
               )}
 
               <div>
-                <p className="text-sm text-gray-500">Action Date</p>
+                <p className="text-sm text-black font-bold">Action Date</p>
                 <p>
                   {selectedComplaint.action.created_at
                     ? new Date(
@@ -258,7 +257,7 @@ function AllComplaints() {
 
             <button
               onClick={() => setSelectedComplaint(null)}
-              className="mt-6 w-full bg-gray-900 text-white py-3 rounded-xl hover:bg-gray-800"
+              className="mt-6 w-full text-black py-3 rounded-xl hover:bg-black hover:text-white border"
             >
               Close
             </button>

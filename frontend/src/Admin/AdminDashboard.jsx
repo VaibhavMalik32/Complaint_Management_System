@@ -268,7 +268,6 @@ function AdminDashboard() {
                                 }
                                 className="rounded-lg border px-4 py-2 hover:bg-black hover:text-white disabled:opacity-50"
                               >
-
                                 {assigning ===
                                 complaint.complaint_id
                                   ? "Assigning..."

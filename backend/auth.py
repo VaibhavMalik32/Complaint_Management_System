@@ -16,6 +16,7 @@ from dependencies import(
 )
 from pydantic import BaseModel
 import secrets
+import re
 
 router = APIRouter(
     prefix="/auth",
@@ -26,8 +27,42 @@ def generate_otp(): #generates a random six-digit number
     return str(secrets.randbelow(900000)+100000)
 
 
+def validate_username(username: str):
+    if not re.fullmatch(r"^(?=.*#!$%[A-Za-z0-9])[A-Za-z0-9._@-]+$", username):
+        raise HTTPException(
+            status_code=400,
+            detail="Username can contain letters, numbers, ., _, @ and -, and must contain at least one letter or number."
+        )
+
+def validate_password(password: str):
+    if len(password) < 8:
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 8 characters long."
+        )
+
+    if not re.search(r"[A-Z]", password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must contain at least one uppercase letter."
+        )
+
+    if not re.search(r"[a-z]", password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must contain at least one lowercase letter."
+        )
+
+    if not re.search(r"[^A-Za-z0-9]", password):
+        raise HTTPException(
+            status_code=400,
+            detail="Password must contain at least one special character."
+        )
+
 @router.post("/register", response_model=UserResponse)
 async def register(user_data: UserCreate, db: Session = Depends(get_db)):
+    validate_username(user_data.username)
+    validate_password(user_data.password)
     existing_user = db.query(User).filter(User.username == user_data.username).first()
     if existing_user:
         raise HTTPException(

@@ -1,4 +1,4 @@
-from sqlalchemy import Column,Integer,String,Boolean,ForeignKey,Text,DateTime
+from sqlalchemy import Column,Integer,String,Boolean,ForeignKey,Text,DateTime,Float
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship #to create relationship between models
 from db import Base
@@ -34,6 +34,8 @@ class Complaint(Base):
     updated_at = Column(DateTime,server_default=func.now(),onupdate=func.now())
     images = relationship("ComplaintImage",back_populates="complaint",cascade="all, delete-orphan") #means if the complaint is deleted, its associated image records are also deleted
     action = relationship("ComplaintAction",back_populates="complaint",cascade="all, delete-orphan",uselist=False) #means one complaint has one action record rather than a list of actions
+    latitude = Column(Float, nullable=True)
+    longitude = Column(Float, nullable=True)
 
 class ComplaintUpdate(Base):
     __tablename__ = "complaint_updates"
@@ -43,6 +45,9 @@ class ComplaintUpdate(Base):
     old_status = Column(String(50), nullable=False)
     new_status = Column(String(50), nullable=False)
     updated_at = Column(DateTime, server_default=func.now())
+    assigned_to = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    performed_by = Column(Integer, ForeignKey("users.user_id"), nullable=True)
+    action = Column(String(100), nullable=True)
 
 class EmailOTP(Base):
     __tablename__ = "email_otps"

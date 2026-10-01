@@ -10,12 +10,10 @@ function UserComplaints() {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const fetchComplaints = async () => {
     try {
       setLoading(true);
       setError("");
-
       const data = await getMyComplaints();
       setComplaints(data);
     } catch (err) {
@@ -24,23 +22,19 @@ function UserComplaints() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchComplaints();
-  }, []);
+  }, []); 
 
   const handleDelete = async (complaintId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this complaint?"
     );
-
     if (!confirmed) {
       return;
     }
-
     try {
       await deleteComplaint(complaintId);
-
       setComplaints((prev) =>
         prev.filter(
           (complaint) =>
@@ -51,19 +45,15 @@ function UserComplaints() {
       setError(err.message);
     }
   };
-
   const getStatusStyle = (status) => {
     switch (status) {
       case "Approved":
       case "Resolved":
         return "bg-green-100 text-green-700";
-
       case "Rejected":
         return "bg-red-100 text-red-700";
-
       case "In Progress":
         return "bg-blue-100 text-blue-700";
-
       case "In Review":
       default:
         return "bg-yellow-100 text-yellow-700";
@@ -166,16 +156,19 @@ function UserComplaints() {
                   </p>
                 </div>
 
-                <div className="mt-4">
+                <div className="mt-4 flex">
                   <label className="font-bold text-xl">
                     Complaint Location -
                   </label>
-
-                  <p className="mt-1 text-gray-700">
+                  <p className="mt-1 ml-1 text-gray-700">
                     {complaint.location || "N/A"}
                   </p>
                 </div>
-
+                <br />
+                <div className="flex">
+                  <h1 className="font-bold text-xl">Assigned to -</h1>
+                  <p className="mt-1 ml-1">{complaint.employee_name || "Not Assigned"}</p>
+                </div>
                 <div className="mt-6 flex flex-col justify-between gap-4 border-t border-gray-100 pt-4 sm:flex-row sm:items-center">
 
                   <p className="text-sm">

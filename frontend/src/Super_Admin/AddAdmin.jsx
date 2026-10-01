@@ -8,7 +8,6 @@ import {
 
 const AddAdmin = () => {
   const navigate = useNavigate();
-
   const [formData, setFormData] = useState({
     username: "",
     full_name: "",
@@ -21,84 +20,64 @@ const AddAdmin = () => {
     department: "",
     post: "",
   });
-
   const [otp, setOtp] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
       [name]: value,
     });
-
-    // Email must be verified again if changed
     if (name === "email") {
       setEmailVerified(false);
       setShowOTP(false);
       setOtp("");
     }
   };
-
-  // Send OTP
   const handleSendOTP = async () => {
     setError("");
     setMessage("");
-
     if (!formData.email) {
       setError("Please enter the admin email first.");
       return;
     }
-
     try {
       const data = await sendOTP(formData.email);
-
       setShowOTP(true);
       setMessage(data.message);
     } catch (err) {
       setError(err.message || "Failed to send OTP.");
     }
   };
-
-  // Verify OTP
   const handleVerifyOTP = async () => {
     setError("");
     setMessage("");
-
     if (otp.length !== 6) {
       setError("Please enter a valid 6-digit OTP.");
       return;
     }
-
     try {
       const data = await verifyOTP(
         formData.email,
         otp
       );
-
       setEmailVerified(true);
       setShowOTP(false);
-
       setMessage(data.message);
     } catch (err) {
       setError(err.message || "Invalid OTP.");
     }
   };
 
-  // Create Admin
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setMessage("");
     setError("");
-
     if (!emailVerified) {
       setError(
         "Please verify the admin email before creating the admin."
@@ -106,12 +85,9 @@ const AddAdmin = () => {
       setLoading(false);
       return;
     }
-
     try {
       await createAdmin(formData);
-
       setMessage("Admin created successfully.");
-
       setFormData({
         username: "",
         full_name: "",
@@ -124,13 +100,11 @@ const AddAdmin = () => {
         department: "",
         post: "",
       });
-
       setOtp("");
       setShowOTP(false);
       setEmailVerified(false);
     } catch (err) {
       console.error(err);
-
       setError(
         err.message || "Failed to create admin."
       );
@@ -142,8 +116,6 @@ const AddAdmin = () => {
   return (
     <div className="flex min-h-screen w-screen items-center justify-center bg-gray-100 p-6">
       <div className="w-full max-w-4xl rounded-2xl border bg-white p-6">
-
-        {/* Header */}
         <div className="mb-6 flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-800">
@@ -176,8 +148,6 @@ const AddAdmin = () => {
           className="rounded-xl bg-white p-2"
         >
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-            {/* Username */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Username
@@ -193,8 +163,6 @@ const AddAdmin = () => {
                 className="w-full rounded-lg border px-4 py-2.5 outline-none"
               />
             </div>
-
-            {/* Full Name */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Full Name
@@ -211,7 +179,6 @@ const AddAdmin = () => {
               />
             </div>
 
-            {/* Email */}
             <div className="md:col-span-2">
               <label className="mb-1 block font-medium text-gray-700">
                 Email
@@ -244,7 +211,6 @@ const AddAdmin = () => {
               </div>
             </div>
 
-            {/* OTP */}
             {showOTP && !emailVerified && (
               <div className="md:col-span-2">
                 <label className="mb-1 block font-medium text-gray-700">
@@ -277,8 +243,6 @@ const AddAdmin = () => {
                 </div>
               </div>
             )}
-
-            {/* Password */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Password
@@ -294,8 +258,6 @@ const AddAdmin = () => {
                 className="w-full rounded-lg border px-4 py-2.5 outline-none"
               />
             </div>
-
-            {/* Phone */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Phone
@@ -313,7 +275,6 @@ const AddAdmin = () => {
               />
             </div>
 
-            {/* Department */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Department
@@ -371,8 +332,6 @@ const AddAdmin = () => {
                 </option>
               </select>
             </div>
-
-            {/* Post */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 Post
@@ -389,7 +348,6 @@ const AddAdmin = () => {
               />
             </div>
 
-            {/* City */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 City
@@ -406,7 +364,6 @@ const AddAdmin = () => {
               />
             </div>
 
-            {/* State */}
             <div>
               <label className="mb-1 block font-medium text-gray-700">
                 State
@@ -423,7 +380,6 @@ const AddAdmin = () => {
               />
             </div>
 
-            {/* Address */}
             <div className="md:col-span-2">
               <label className="mb-1 block font-medium text-gray-700">
                 Address
@@ -440,8 +396,6 @@ const AddAdmin = () => {
               />
             </div>
           </div>
-
-          {/* Submit */}
           <div className="mt-6 flex justify-end">
             <button
               type="submit"

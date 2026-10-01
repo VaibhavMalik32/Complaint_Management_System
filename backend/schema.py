@@ -25,7 +25,7 @@ class UserResponse(UserBase):
     user_id: int
     disabled: bool
     role:str
-    department: str
+    department: str | None = None
     post: str
     class Config: #config tells pydantic how it should behave
         from_attributes = True #it tells pydantic that it can read values from object's attributes
@@ -47,10 +47,13 @@ class ComplaintResponse(BaseModel):
     complaint_id: int
     user_id: int
     employee_id: int | None = None
+    employee_name: str | None = None
     title: str
     description: str
     category: str
     location: str
+    latitude: float | None = None
+    longitude: float | None = None
     status: str
     created_at: datetime | None = None
     updated_at: datetime | None = None
@@ -62,8 +65,12 @@ class ComplaintResponse(BaseModel):
 class ComplaintUpdateResponse(BaseModel):
     update_id: int
     complaint_id: int
-    employee_id: int
     updated_by: int
+    assigned_to: int | None = None
+    assigned_to_name: str | None = None
+    performed_by: int | None = None
+    performed_by_name: str | None = None
+    action: str | None = None
     old_status: str
     new_status: str
     updated_at: datetime

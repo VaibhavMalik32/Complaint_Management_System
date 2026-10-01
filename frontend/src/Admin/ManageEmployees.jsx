@@ -9,17 +9,13 @@ import {
 
 const ManageEmployees = () => {
   const navigate = useNavigate();
-
   const [admin, setAdmin] = useState(null);
   const [employees, setEmployees] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [showTransfer, setShowTransfer] = useState(false);
   const [transferring, setTransferring] = useState(false);
-
   const [formData, setFormData] = useState({
     address: "",
     city: "",
@@ -27,22 +23,18 @@ const ManageEmployees = () => {
     department: "",
     post: "",
   });
-
   const fetchData = async () => {
     try {
       setLoading(true);
       setError("");
-
       const [adminData, employeeData] = await Promise.all([
         getCurrentUser(),
         getMatchingEmployees(),
       ]);
-
       setAdmin(adminData);
       setEmployees(employeeData || []);
     } catch (err) {
       console.error(err);
-
       setError(
         err.message || "Failed to load employee information."
       );
@@ -50,14 +42,11 @@ const ManageEmployees = () => {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, []);
-
   const handleTransferClick = (employee) => {
     setSelectedEmployee(employee);
-
     setFormData({
       address: employee.address || "",
       city: employee.city || "",
@@ -65,29 +54,23 @@ const ManageEmployees = () => {
       department: admin?.department || employee.department || "",
       post: employee.post || "",
     });
-
     setShowTransfer(true);
     setError("");
   };
-
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
   };
-
   const handleTransfer = async (e) => {
     e.preventDefault();
-
     if (!selectedEmployee) {
       return;
     }
-
     try {
       setTransferring(true);
       setError("");
-
       const transferData = {
         address: formData.address,
         city: formData.city,
@@ -95,21 +78,16 @@ const ManageEmployees = () => {
         department: admin.department,
         post: formData.post,
       };
-
       await transferEmployee(
         selectedEmployee.user_id,
         transferData
       );
-
       alert("Employee transferred successfully.");
-
       setShowTransfer(false);
       setSelectedEmployee(null);
-
       await fetchData();
     } catch (err) {
       console.error(err);
-
       setError(
         err.message || "Failed to transfer employee."
       );
@@ -117,33 +95,25 @@ const ManageEmployees = () => {
       setTransferring(false);
     }
   };
-
   const handleRemove = async (employeeId) => {
     const confirmRemove = window.confirm(
       "Are you sure you want to remove this employee from their post?"
     );
-
     if (!confirmRemove) {
       return;
     }
-
     try {
       setError("");
-
       await removeEmployee(employeeId);
-
       alert("Employee removed from post successfully.");
-
       await fetchData();
     } catch (err) {
       console.error(err);
-
       setError(
         err.message || "Failed to remove employee."
       );
     }
   };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -153,7 +123,6 @@ const ManageEmployees = () => {
       </div>
     );
   }
-
   return (
     <div className="h-screen w-screen justify-center items-center flex">
         <div className="min-h-screen border rounded-2xl p-6">
@@ -200,87 +169,64 @@ const ManageEmployees = () => {
             </div>
             ) : (
             <div className="overflow-hidden rounded-xl bg-white shadow">
-
                 <div className="overflow-x-auto">
-
                 <table className="w-full">
-
                     <thead className="bg-gray-100">
                     <tr>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         ID
                         </th>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         Employee
                         </th>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         Email
                         </th>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         Department
                         </th>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         Post
                         </th>
-
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         Location
                         </th>
-
                         <th className="px-5 py-3 text-center text-sm font-semibold text-gray-700">
                         Actions
                         </th>
-
                     </tr>
                     </thead>
-
                     <tbody className="divide-y divide-gray-200">
-
                     {employees.map((employee) => (
                         <tr
                         key={employee.user_id}
                         className=""
                         >
-
                         <td className="px-5 py-4 text-sm text-gray-700">
                             {employee.user_id}
                         </td>
-
                         <td className="px-5 py-4">
                             <p className="font-medium text-gray-800">
                             {employee.full_name}
                             </p>
                         </td>
-
                         <td className="px-5 py-4 text-sm text-gray-600">
                             {employee.email}
                         </td>
-
                         <td className="px-5 py-4 text-sm text-gray-600">
                             {employee.department || "N/A"}
                         </td>
-
                         <td className="px-5 py-4 text-sm text-gray-600">
                             {employee.post || "N/A"}
                         </td>
-
                         <td className="px-5 py-4 text-sm text-gray-600">
                             <p>{employee.city || "N/A"}</p>
-
                             <p className="text-xs text-gray-400">
                             {employee.state || "N/A"}
                             </p>
                         </td>
-
                         <td className="px-5 py-4">
-
                             <div className="flex justify-center gap-2">
-
                             <button
                                 onClick={() =>
                                 handleTransferClick(employee)
@@ -289,7 +235,6 @@ const ManageEmployees = () => {
                             >
                                 Transfer
                             </button>
-
                             <button
                                 onClick={() =>
                                 handleRemove(employee.user_id)
@@ -298,36 +243,27 @@ const ManageEmployees = () => {
                             >
                                 Remove
                             </button>
-
                             </div>
-
                         </td>
-
                         </tr>
                     ))}
-
                     </tbody>
                 </table>
-
                 </div>
             </div>
             )}
             {showTransfer && selectedEmployee && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-
                 <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-white shadow-xl">
                 <div className="flex items-center justify-between border-b p-6">
-
                     <div>
                     <h2 className="text-xl font-bold text-gray-800">
                         Transfer Employee
                     </h2>
-
                     <p className="mt-1 text-sm text-gray-500">
                         {selectedEmployee.full_name}
                     </p>
                     </div>
-
                     <button
                     onClick={() => {
                         setShowTransfer(false);
@@ -337,21 +273,16 @@ const ManageEmployees = () => {
                     >
                     ×
                     </button>
-
                 </div>
                 <form
                     onSubmit={handleTransfer}
                     className="p-6"
                 >
-
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-
-                    {/* Department */}
                     <div>
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                         Department
                         </label>
-
                         <input
                         type="text"
                         value={admin?.department || ""}
@@ -359,12 +290,10 @@ const ManageEmployees = () => {
                         className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-gray-100 px-3 py-2 text-gray-600"
                         />
                     </div>
-
                     <div>
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                         Post
                         </label>
-
                         <input
                         type="text"
                         name="post"
@@ -375,12 +304,10 @@ const ManageEmployees = () => {
                         className="w-full rounded-lg border px-3 py-2 outline-none"
                         />
                     </div>
-
                     <div>
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                         City
                         </label>
-
                         <input
                         type="text"
                         name="city"
@@ -390,12 +317,10 @@ const ManageEmployees = () => {
                         className="w-full rounded-lg border px-3 py-2 outline-none"
                         />
                     </div>
-
                     <div>
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                         State
                         </label>
-
                         <input
                         type="text"
                         name="state"
@@ -406,11 +331,9 @@ const ManageEmployees = () => {
                         />
                     </div>
                     <div className="md:col-span-2">
-
                         <label className="mb-1 block text-sm font-medium text-gray-700">
                         Address
                         </label>
-
                         <textarea
                         name="address"
                         value={formData.address}
@@ -433,7 +356,6 @@ const ManageEmployees = () => {
                     >
                         Cancel
                     </button>
-
                     <button
                         type="submit"
                         disabled={transferring || !admin?.department}
@@ -443,14 +365,11 @@ const ManageEmployees = () => {
                         ? "Transferring..."
                         : "Transfer Employee"}
                     </button>
-
                     </div>
-
                 </form>
                 </div>
             </div>
             )}
-
         </div>
         </div>
     </div>

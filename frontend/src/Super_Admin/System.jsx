@@ -149,7 +149,7 @@ function System() {
                     className="border-t hover:bg-gray-50"
                   >
                     <td className="px-6 py-4">
-                      #{item.user_id}
+                      {item.user_id}
                     </td>
 
                     <td className="px-6 py-4 font-medium">

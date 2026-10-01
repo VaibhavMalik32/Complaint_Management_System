@@ -8,12 +8,10 @@ function EmployeeDashboard() {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
   const fetchComplaints = async () => {
     try {
       setLoading(true);
       setError("");
-
       const data = await getAssignedComplaints();
       setComplaints(data);
     } catch (err) {
@@ -23,29 +21,22 @@ function EmployeeDashboard() {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchComplaints();
   }, []);
-
   const total = complaints.length;
-
   const inReview = complaints.filter(
     (c) => c.status === "In Review"
   ).length;
-
   const inProgress = complaints.filter(
     (c) => c.status === "In Progress"
   ).length;
-
   const resolved = complaints.filter(
     (c) => c.status === "Resolved"
   ).length;
-
   const rejected = complaints.filter(
     (c) => c.status === "Rejected"
   ).length;
-
   const handleStatusChange = async (
     complaintId,
     newStatus
@@ -55,27 +46,22 @@ function EmployeeDashboard() {
         complaintId,
         newStatus
       );
-
       await fetchComplaints();
     } catch (err) {
       console.log(err);
       setError(err.message);
     }
   };
-
   const getStatusClass = (status) => {
     if (status === "Resolved") {
       return "bg-green-100 text-green-700";
     }
-
     if (status === "Rejected") {
       return "bg-red-100 text-red-700";
     }
-
     if (status === "In Progress") {
       return "bg-blue-100 text-blue-700";
     }
-
     return "bg-yellow-100 text-yellow-700";
   };
 
@@ -84,7 +70,7 @@ function EmployeeDashboard() {
 
       <div className="border-b px-8 py-4">
         <h1 className="text-center text-3xl font-semibold">
-          Employee Dashboard
+          Complaint Management System
         </h1>
       </div>
 

@@ -38,7 +38,7 @@ function UserDashboard() {
     )
     .slice(0, 3);
   return (
-    <div className="w-full min-h-screen">
+    <div className="w-full min-h-screen bg-slate-100">
       <div className="w-full">
         <div className="border-b p-4">
           <h1 className="text-3xl text-center text-blue-700">

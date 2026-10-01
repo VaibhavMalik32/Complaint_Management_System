@@ -4,9 +4,6 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
-print("MAIL_USERNAME:", os.getenv("MAIL_USERNAME"))
-print("MAIL_PASSWORD EXISTS:", bool(os.getenv("MAIL_PASSWORD")))
-
 conf = ConnectionConfig( #creates the gmail smtp configuration(how the application connects to the email server)
     MAIL_USERNAME=os.getenv("MAIL_USERNAME"),
     MAIL_PASSWORD=os.getenv("MAIL_PASSWORD"),

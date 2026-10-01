@@ -1,4 +1,4 @@
-const API_URL = "http://127.0.0.1:8000";
+export const API_URL = "http://127.0.0.1:8000";
 
 export const registerUser = async (userData) => {
   const response = await fetch(`${API_URL}/auth/register`, {
@@ -8,22 +8,17 @@ export const registerUser = async (userData) => {
     },
     body: JSON.stringify(userData),
   });
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data.detail || "Registration failed");
   }
-
   return data;
 };
 
 export const loginUser = async (username, password) => {
   const formData = new URLSearchParams();
-
   formData.append("username", username);
   formData.append("password", password);
-
   const response = await fetch(`${API_URL}/auth/login`, {
     method: "POST",
     headers: {
@@ -31,13 +26,10 @@ export const loginUser = async (username, password) => {
     },
     body: formData,
   });
-
   const data = await response.json();
-
   if (!response.ok) {
     throw new Error(data.detail || "Login failed");
   }
-
   return data;
 };
 
@@ -87,7 +79,9 @@ export const createComplaint = async ({
   description,
   category,
   location,
-  images,
+  latitude,
+  longitude,
+  images
 }) => {
   const token = localStorage.getItem("access_token");
 
@@ -97,6 +91,8 @@ export const createComplaint = async ({
   formData.append("description", description);
   formData.append("category", category);
   formData.append("location", location);
+  formData.append("latitude", latitude);
+  formData.append("longitude", longitude);
 
   images.forEach((image) => {
     formData.append("images", image);
@@ -105,9 +101,9 @@ export const createComplaint = async ({
   const response = await fetch(`${API_URL}/complaints/create`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`
     },
-    body: formData,
+    body: formData
   });
 
   const data = await response.json();

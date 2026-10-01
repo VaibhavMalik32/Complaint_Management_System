@@ -9,9 +9,7 @@ import {
 
 const AddEmployee = () => {
   const navigate = useNavigate();
-
   const [admin, setAdmin] = useState(null);
-
   const [formData, setFormData] = useState({
     username: "",
     full_name: "",
@@ -24,30 +22,24 @@ const AddEmployee = () => {
     department: "",
     post: "",
   });
-
   const [otp, setOtp] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
-
   const [loading, setLoading] = useState(false);
   const [loadingAdmin, setLoadingAdmin] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   useEffect(() => {
     const fetchAdmin = async () => {
       try {
         const data = await getCurrentUser();
-
         setAdmin(data);
-
         setFormData((prev) => ({
           ...prev,
           department: data.department || "",
         }));
       } catch (err) {
         console.error(err);
-
         setError(
           err.message || "Failed to fetch admin information."
         );
@@ -55,63 +47,47 @@ const AddEmployee = () => {
         setLoadingAdmin(false);
       }
     };
-
     fetchAdmin();
   }, []);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     setFormData({
       ...formData,
       [name]: value,
     });
-
-    // If email is changed after verification,
-    // it must be verified again.
     if (name === "email") {
       setEmailVerified(false);
       setShowOTP(false);
       setOtp("");
     }
   };
-
-  // Send OTP
   const handleSendOTP = async () => {
     setError("");
     setMessage("");
-
     if (!formData.email) {
       setError("Please enter the employee email first.");
       return;
     }
-
     try {
       const data = await sendOTP(formData.email);
-
       setShowOTP(true);
       setMessage(data.message);
     } catch (err) {
       setError(err.message || "Failed to send OTP.");
     }
   };
-
-  // Verify OTP
   const handleVerifyOTP = async () => {
     setError("");
     setMessage("");
-
     if (otp.length !== 6) {
       setError("Please enter a valid 6-digit OTP.");
       return;
     }
-
     try {
       const data = await verifyOTP(
         formData.email,
         otp
       );
-
       setEmailVerified(true);
       setShowOTP(false);
       setMessage(data.message);
@@ -119,14 +95,11 @@ const AddEmployee = () => {
       setError(err.message || "Invalid OTP.");
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     setLoading(true);
     setError("");
     setMessage("");
-
     if (!emailVerified) {
       setError(
         "Please verify the employee email before creating the employee."
@@ -134,12 +107,9 @@ const AddEmployee = () => {
       setLoading(false);
       return;
     }
-
     try {
       await createEmployee(formData);
-
       setMessage("Employee created successfully.");
-
       setFormData({
         username: "",
         full_name: "",
@@ -152,13 +122,11 @@ const AddEmployee = () => {
         department: admin?.department || "",
         post: "",
       });
-
       setOtp("");
       setShowOTP(false);
       setEmailVerified(false);
     } catch (err) {
       console.error(err);
-
       setError(
         err.message || "Failed to create employee."
       );
@@ -166,7 +134,6 @@ const AddEmployee = () => {
       setLoading(false);
     }
   };
-
   if (loadingAdmin) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-100">
@@ -176,8 +143,6 @@ const AddEmployee = () => {
       </div>
     );
   }
-console.log("FORM DATA:", formData);
-console.log("EMAIL VERIFIED:", emailVerified);
   return (
     <div className="h-screen w-screen justify-center items-center flex mt-20">
         <div className="min-h-screen border rounded-2xl p-6">

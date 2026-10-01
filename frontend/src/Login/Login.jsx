@@ -37,7 +37,7 @@ function Login() {
         <div>
           <h1 className="text-4xl font-bold">Complaint Management System</h1><br />
           <h1 className="text-xl">A centralized platform for efficient complaint management and resolution.</h1><br />
-          <p>Access your account to submit complaints, track their progress, view updates, and monitor actions taken toward resolution.</p>
+          <p>Access your account to submit complaints, track their progress, view updates, and monitor actions taken toward resolution.</p><br />
           <ol className="list-disc ml-4">
             <li>Submit and Track Complaints</li>
             <li>View Complaint Status and History</li>
