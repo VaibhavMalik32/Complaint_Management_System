@@ -65,20 +65,17 @@ function AllComplaints() {
   }
 
   return (
-    <div className="flex-1 min-h-screen bg-gray-50 p-8">
+    <div className="flex-1 min-h-screen bg-green-50 p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold text-green-800">
           All Complaints
         </h1>
-        <p className="text-gray-500 mt-1">
-          Monitor all complaints and employee actions
-        </p>
       </div>
 
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100">
+            <thead className="bg-green-200">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
@@ -121,7 +118,7 @@ function AllComplaints() {
                   return (
                     <tr
                       key={complaint.complaint_id}
-                      className="border-t"
+                      className="border-t bg-green-50"
                     >
                       <td className="px-6 py-4">
                         {complaint.complaint_id}
@@ -193,9 +190,9 @@ function AllComplaints() {
 
       {selectedComplaint && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl w-full max-w-2xl p-6">
+          <div className="bg-green-100 rounded-2xl w-full max-w-2xl p-6">
             <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className="text-xl font-bold text-green-800">
                 Complaint Action
               </h2>
 
@@ -209,29 +206,29 @@ function AllComplaints() {
 
             <div className="space-y-4">
               <div className="flex">
-                <p className="text-sm font-bold text-black">Complaint - </p>
+                <p className="text-sm font-bold text-green-700">Complaint - </p>
                 <p className="-mt-0.5 ml-1">
                   {selectedComplaint.complaint.title}
                 </p>
               </div>
 
               <div className="flex">
-                <p className="text-sm font-bold text-black">Employee - </p>
+                <p className="text-sm font-bold text-green-700">Employee - </p>
                 <p className="-mt-0.5 ml-1">
                   Employee {selectedComplaint.action.employee_id}
                 </p>
               </div>
 
               <div>
-                <p className="text-sm text-black font-bold">Action Taken</p>
-                <p className="mt-1 bg-gray-50 rounded-xl p-4">
+                <p className="text-sm font-bold text-green-700">Action Taken</p>
+                <p className="mt-1 bg-green-50 border  rounded-xl p-4">
                   {selectedComplaint.action.action_taken}
                 </p>
               </div>
 
               {selectedComplaint.action.proof_image && (
                 <div>
-                  <p className="text-sm text-gray-500 mb-2">
+                  <p className="text-sm text-green-700 mb-2">
                     Proof Image
                   </p>
 
@@ -244,7 +241,7 @@ function AllComplaints() {
               )}
 
               <div>
-                <p className="text-sm text-black font-bold">Action Date</p>
+                <p className="text-sm text-green-700 font-bold">Action Date</p>
                 <p>
                   {selectedComplaint.action.created_at
                     ? new Date(

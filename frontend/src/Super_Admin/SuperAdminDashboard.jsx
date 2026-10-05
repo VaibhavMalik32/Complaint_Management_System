@@ -31,9 +31,9 @@ function SuperAdminDashboard() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-slate-100">
+    <div className="min-h-screen w-full bg-green-50">
       <div className="border-b px-8 py-4">
-        <h1 className="text-center text-3xl font-semibold">
+        <h1 className="text-center text-3xl font-semibold text-green-700">
           Complaint Management System
         </h1>
       </div>
@@ -44,52 +44,52 @@ function SuperAdminDashboard() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-white">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 ml-20 gap-60">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p className="text-lg">
                   Users - {stats.total_users}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p className="text-lg">
                   Employees - {stats.total_employees}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p className="text-lg">
                   Admins - {stats.total_admins}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p className="text-lg">
                   Complaints - {stats.total_complaints}
                 </p>
               </div>
             </div>
-            <div className="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              <div className="flex h-32 items-center justify-center rounded-2xl border-2 bg-white">
+            <div className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 ml-20 gap-60">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p>
                   In Review - {stats.in_review}
                 </p>
               </div>
-              <div className="flex h-32 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p>
                   In Progress - {stats.in_progress}
                 </p>
               </div>
-              <div className="flex h-32 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p>
                   Resolved - {stats.resolved}
                 </p>
               </div>
-              <div className="flex h-32 items-center justify-center rounded-2xl border-2 bg-white">
+              <div className="flex h-25 w-50 items-center justify-center rounded-2xl border-2 bg-green-200">
                 <p>
                   Rejected - {stats.rejected}
                 </p>
               </div>
             </div>
             <div className="mt-12">
-              <h2 className="mb-5 text-2xl font-semibold">
+              <h2 className="mb-5 text-2xl font-bold text-green-700">
                 All Complaints
               </h2>
               {complaints.length === 0 ? (
@@ -97,10 +97,10 @@ function SuperAdminDashboard() {
                   <p>No complaints found.</p>
                 </div>
               ) : (
-                <div className="overflow-x-auto rounded-xl border bg-white">
+                <div className="overflow-x-auto rounded-xl border ">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="border-b bg-gray-50">
+                      <tr className="border-b bg-green-200">
                         <th className="px-5 py-4 text-left">
                           ID
                         </th>

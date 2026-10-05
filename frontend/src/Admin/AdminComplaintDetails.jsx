@@ -127,10 +127,10 @@ function AdminComplaintDetails() {
     );
   }
   return (
-    <div className="flex-1 min-h-screen bg-gray-50 p-8">
+    <div className="flex-1 min-h-screen bg-green-50 p-8">
       <button
         onClick={() => navigate("/admin/complaints")}
-        className="mb-6 px-4 py-2 bg-white border rounded-lg hover:bg-gray-50"
+        className="mb-6 px-4 py-2 bg-white border rounded-lg hover:bg-green-100"
       >
         ← Back
       </button>
@@ -144,13 +144,13 @@ function AdminComplaintDetails() {
           {success}
         </div>
       )}
-      <div className="max-w-4xl bg-white rounded-2xl border shadow-sm p-8">
+      <div className="max-w-4xl bg-green-100 rounded-2xl border shadow-sm p-8">
         <div className="flex justify-between items-start mb-8">
           <div>
-            <p className="text-sm text-gray-500">
-              Complaint #{complaint.complaint_id}
+            <p className="text-sm text-green-700">
+              Complaint {complaint.complaint_id}
             </p>
-            <h1 className="text-3xl font-bold text-gray-800 mt-1">
+            <h1 className="text-3xl font-bold text-green-800 mt-1">
               {complaint.title}
             </h1>
           </div>
@@ -164,7 +164,7 @@ function AdminComplaintDetails() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-xl text-green-800">
               Complaint ID
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -172,7 +172,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               User ID
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -180,7 +180,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               Category
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -188,7 +188,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               Complaint Location
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -196,7 +196,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               Assigned Employee
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -206,7 +206,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               Submitted
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -218,7 +218,7 @@ function AdminComplaintDetails() {
             </p>
           </div>
           <div>
-            <p className="text-sm text-gray-500">
+            <p className="text-sm text-green-800">
               Last Updated
             </p>
             <p className="font-medium text-gray-800 mt-1">
@@ -231,16 +231,16 @@ function AdminComplaintDetails() {
           </div>
         </div>
         <div className="mb-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-3">
+          <h2 className="text-lg font-semibold text-green-800 mb-3">
             Complaint Description
           </h2>
-          <div className="bg-gray-50 rounded-xl p-5 text-gray-700">
+          <div className="bg-green-200 rounded-xl p-5 text-green-800 border">
             {complaint.description}
           </div>
         </div>
         {!complaint.employee_id && (
           <div className="mb-8 border-t pt-8">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4">
+            <h2 className="text-lg font-semibold text-green-800 mb-4">
               Assign Employee
             </h2>
             {employeesLoading ? (
@@ -287,7 +287,7 @@ function AdminComplaintDetails() {
           </div>
         )}
         <div className="mb-8 border-t pt-8">
-          <h2 className="text-lg font-semibold text-gray-800 mb-4">
+          <h2 className="text-lg font-semibold text-green-800 mb-4">
             Update Status
           </h2>
           <div className="flex flex-col gap-4 sm:flex-row">
@@ -328,7 +328,7 @@ function AdminComplaintDetails() {
         {complaint.images &&
           complaint.images.length > 0 && (
             <div className="border-t pt-8">
-              <h2 className="text-lg font-semibold text-gray-800 mb-4">
+              <h2 className="text-lg font-semibold text-green-800 mb-4">
                 Evidence Submitted By User
               </h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">

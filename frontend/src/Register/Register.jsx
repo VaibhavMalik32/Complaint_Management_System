@@ -140,7 +140,7 @@ function Register() {
     <div className="flex">
       <div className="h-120 w-full justify-center items-center flex ml-20">
         <div>
-          <h1 className="text-4xl font-bold ">
+          <h1 className="text-4xl font-bold text-green-600 ">
             Complaint Management System
           </h1>
           <br />
@@ -171,7 +171,7 @@ function Register() {
 
       <div className="h-120 w-full justify-center items-center flex mt-25">
         <div className="h-auto w-100 border rounded-2xl p-5">
-          <h1 className="text-center font-bold text-3xl mt-2 mb-6">
+          <h1 className="text-center font-bold text-3xl mt-2 mb-6 text-green-600">
             Register Form
           </h1>
 
@@ -225,7 +225,7 @@ function Register() {
                 <button
                   type="button"
                   onClick={handleSendOTP}
-                  className="w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-black hover:text-white"
+                  className="w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-green-500 hover:text-black"
                 >
                   Verify
                 </button>
@@ -256,7 +256,7 @@ function Register() {
                 <button
                   type="button"
                   onClick={handleVerifyOTP}
-                  className="ml-2 w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-black hover:text-white"
+                  className="ml-2 w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-green-500 hover:text-black"
                 >
                   Verify OTP
                 </button>
@@ -343,7 +343,7 @@ function Register() {
             <button
               type="submit"
               disabled={!usernameValid || !passwordValid}
-              className="cursor-pointer w-70 h-10 rounded outline hover:bg-black hover:text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="cursor-pointer w-70 h-10 rounded outline hover:bg-green-500 hover:text-black disabled:cursor-not-allowed"
             >
               Register
             </button>

@@ -45,24 +45,21 @@ function AdminComplaints() {
     );
   }
   return (
-    <div className="flex-1 min-h-screen bg-gray-50 p-8">
+    <div className="flex-1 min-h-screen bg-green-50 p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold text-green-800">
           Complaints
         </h1>
-        {/* <p className="mt-2 text-gray-500">
-          Complaints available for your department and location
-        </p> */}
       </div>
       {error && (
         <div className="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-red-600">
           {error}
         </div>
       )}
-      <div className="bg-white rounded-2xl border shadow-sm overflow-hidden">
+      <div className="bg-green-100 rounded-2xl border shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100">
+            <thead className="bg-green-100">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
@@ -104,7 +101,7 @@ function AdminComplaints() {
                 complaints.map((complaint) => (
                   <tr
                     key={complaint.complaint_id}
-                    className="border-t hover:bg-gray-50"
+                    className="border-t bg-green-50"
                   >
                     <td className="px-6 py-4">
                       {complaint.complaint_id}

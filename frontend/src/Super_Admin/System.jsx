@@ -51,9 +51,9 @@ function System() {
   }
 
   return (
-    <div className="flex-1 min-h-screen bg-gray-50 p-8">
+    <div className="flex-1 min-h-screen bg-green-50 p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">
+        <h1 className="text-3xl font-bold text-green-800">
           System
         </h1>
       </div>
@@ -63,8 +63,8 @@ function System() {
           onClick={() => setActiveTab("users")}
           className={`px-5 py-3 rounded-xl ${
             activeTab === "users"
-              ? "bg-gray-900 text-white"
-              : "bg-white border text-gray-700"
+              ? "bg-green-900 text-white"
+              : "bg-green-100 border text-green-700"
           }`}
         >
           Users ({users.length})
@@ -74,8 +74,8 @@ function System() {
           onClick={() => setActiveTab("employees")}
           className={`px-5 py-3 rounded-xl ${
             activeTab === "employees"
-              ? "bg-gray-900 text-white"
-              : "bg-white border text-gray-700"
+              ? "bg-green-900 text-white"
+              : "bg-green-100 border text-green-700"
           }`}
         >
           Employees ({employees.length})
@@ -85,8 +85,8 @@ function System() {
           onClick={() => setActiveTab("admins")}
           className={`px-5 py-3 rounded-xl ${
             activeTab === "admins"
-              ? "bg-gray-900 text-white"
-              : "bg-white border text-gray-700"
+              ? "bg-green-900 text-white"
+              : "bg-green-100 border text-green-700"
           }`}
         >
           Admins ({admins.length})
@@ -96,7 +96,7 @@ function System() {
       <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-gray-100">
+            <thead className="bg-green-100">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
@@ -146,7 +146,7 @@ function System() {
                 data.map((item) => (
                   <tr
                     key={item.user_id}
-                    className="border-t hover:bg-gray-50"
+                    className="border-t bg-green-50"
                   >
                     <td className="px-6 py-4">
                       {item.user_id}

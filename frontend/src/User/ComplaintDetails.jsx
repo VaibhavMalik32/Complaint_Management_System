@@ -54,36 +54,36 @@ function ComplaintDetails() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-green-50">
       <div className="border-b px-8 py-4">
         <h1 className="text-center text-3xl font-semibold">
           Complaint Details
         </h1>
       </div>
 
-      <div className="mx-auto max-w-4xl px-8 py-10">
-        <div className="rounded-2xl border p-8">
+      <div className="mx-auto max-w-4xl px-8 py-10 ">
+        <div className="rounded-2xl border p-8 bg-green-200">
           <div className="mb-6 flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold">
+              <h2 className="text-2xl font-bold text-green-800">
                 Title - {complaint.title}
               </h2>
             </div>
 
-            <span className="rounded-xl border px-4 py-2">
+            <span className="rounded-xl border px-4 py-2 ">
               {complaint.status}
             </span>
           </div>
 
-          <div className="mt-6 border-t pt-6">
+          <div className="mt-6 border-t pt-6 ">
             <div className="mb-5">
-              <p className="font-semibold">
-                Category - {complaint.category}
+              <p className="font-semibold flex">
+                <h1 className="text-green-800">Category - </h1> {complaint.category}
               </p>
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold">Complaint Location</p>
+              <p className="font-semibold text-green-800">Complaint Location</p>
               <p className="mt-1">{complaint.location || "N/A"}</p>
 
               {complaint.latitude != null &&
@@ -100,14 +100,14 @@ function ComplaintDetails() {
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold">Description</p>
+              <p className="font-semibold text-green-800">Description</p>
               <p className="mt-1 whitespace-pre-wrap">
                 {complaint.description}
               </p>
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold">
+              <p className="font-semibold text-green-800">
                 Submitted On -{" "}
                 {complaint.created_at
                   ? new Date(complaint.created_at).toLocaleDateString()
@@ -117,7 +117,7 @@ function ComplaintDetails() {
           </div>
 
           <div className="mt-6 border-t pt-6">
-            <h3 className="mb-5 text-xl font-semibold">
+            <h3 className="mb-5 text-xl font-bold text-green-800">
               Evidence Images
             </h3>
 
@@ -137,13 +137,13 @@ function ComplaintDetails() {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500">No images available.</p>
+              <p className="text-green-800 font-bold">No images available.</p>
             )}
           </div>
 
           {showHistory && (
             <div className="mt-8 border-t pt-6">
-              <h3 className="mb-6 text-xl font-semibold">
+              <h3 className="mb-6 text-xl font-bold text-green-800">
                 Complaint History
               </h3>
 
@@ -157,28 +157,28 @@ function ComplaintDetails() {
                         key={item.update_id}
                         className="relative flex gap-5"
                       >
-                        <div className="relative z-10 mt-1 h-7 w-7 shrink-0 rounded-full border-4 border-white bg-black" />
+                        <div className="relative z-10 mt-1 h-7 w-7 shrink-0 rounded-full border-4 border-white bg-green-300" />
 
-                        <div className="flex-1 rounded-xl border bg-gray-50 p-5">
+                        <div className="flex-1 rounded-xl border p-5 bg-green-400">
                           <div className="flex flex-col gap-1">
                             <p className="text-lg font-semibold">
                               {item.action || "Status Changed"}
                             </p>
 
                             {item.action === "Complaint Submitted" ? (
-                              <p className="text-sm text-gray-700">
+                              <p className="text-sm text-green-800">
                                 Complaint Submitted
                               </p>
                             ) : item.action === "Assigned" ? (
                               <>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-green-800">
                                   Assigned to{" "}
                                   <span className="font-semibold">
                                     {item.assigned_to_name || "Employee"}
                                   </span>
                                 </p>
 
-                                <p className="text-sm text-gray-600">
+                                <p className="text-sm text-green-800">
                                   By:{" "}
                                   <span className="font-medium">
                                     {item.performed_by_name || "Admin"}
@@ -187,7 +187,7 @@ function ComplaintDetails() {
                               </>
                             ) : (
                               <>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-green-800">
                                   Status:{" "}
                                   <span className="font-medium">
                                     {item.old_status}
@@ -198,7 +198,7 @@ function ComplaintDetails() {
                                   </span>
                                 </p>
 
-                                <p className="text-sm text-gray-600">
+                                <p className="text-sm text-green-800">
                                   By:{" "}
                                   <span className="font-medium">
                                     {item.performed_by_name || "User"}
@@ -207,7 +207,7 @@ function ComplaintDetails() {
                               </>
                             )}
 
-                            <p className="mt-2 text-sm text-gray-500">
+                            <p className="mt-2 text-sm text-green-800">
                               {item.updated_at
                                 ? new Date(item.updated_at).toLocaleString(
                                     "en-IN",
@@ -229,7 +229,7 @@ function ComplaintDetails() {
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500">
+                <p className="text-green-800">
                   No complaint history available.
                 </p>
               )}
@@ -239,14 +239,14 @@ function ComplaintDetails() {
           <div className="mt-8 flex gap-4">
             <button
               onClick={() => navigate("/home/complaints")}
-              className="rounded-xl border border-gray-300 px-5 py-3 font-medium text-gray-700 hover:bg-gray-100"
+              className="rounded-xl border border-green-700 px-5 py-3 font-medium text-green-800 hover:bg-green-100"
             >
               Back to Complaints
             </button>
 
             <button
               onClick={() => setShowHistory((prev) => !prev)}
-              className="rounded-xl bg-black px-5 py-3 font-medium text-white hover:bg-gray-800"
+              className="rounded-xl bg-green-700 px-5 py-3 font-medium text-white hover:bg-green-600"
             >
               {showHistory ? "Hide Complaint History" : "Complaint History"}
             </button>

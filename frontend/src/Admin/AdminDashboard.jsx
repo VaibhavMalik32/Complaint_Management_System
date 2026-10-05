@@ -106,9 +106,9 @@ function AdminDashboard() {
     }
   };
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-green-50">
       <div className="border-b px-8 py-4">
-        <h1 className="text-center text-3xl font-semibold">
+        <h1 className="text-center text-3xl font-semibold text-green-800">
           Admin Dashboard
         </h1>
       </div>
@@ -125,34 +125,34 @@ function AdminDashboard() {
         ) : (
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
                 <p className="text-lg">
                   Total - {total}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
                 <p className="text-lg">
                   In Review - {inReview}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
                 <p className="text-lg">
                   In Progress - {inProgress}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
                 <p className="text-lg">
                   Resolved - {resolved}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
+              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
                 <p className="text-lg">
                   Rejected - {rejected}
                 </p>
               </div>
             </div>
             <div className="mt-12">
-              <h2 className="mb-5 text-2xl font-semibold">
+              <h2 className="mb-5 text-2xl font-semibold text-green-800">
                 Complaints
               </h2>
               {complaints.length === 0 ? (
@@ -163,7 +163,7 @@ function AdminDashboard() {
                 <div className="overflow-x-auto rounded-xl border">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="border-b">
+                      <tr className="border-b bg-green-200">
                         <th className="px-5 py-4 text-left">
                           ID
                         </th>

@@ -38,33 +38,33 @@ function UserDashboard() {
     )
     .slice(0, 3);
   return (
-    <div className="w-full min-h-screen bg-slate-100">
+    <div className="w-full min-h-screen bg-green-50">
       <div className="w-full">
-        <div className="border-b p-4">
-          <h1 className="text-3xl text-center text-blue-700">
+        <div className="border p-4">
+          <h1 className="text-3xl text-center font-bold text-green-700">
             Complaint Management System
           </h1>
         </div>
         <div className="p-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div className="border-3 h-60 rounded-2xl flex justify-center items-center">
+            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
               Total - {total}
             </div>
-            <div className="border-3 h-60 rounded-2xl flex justify-center items-center">
+            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
               In Review - {inReview}
             </div>
-            <div className="border-3 h-60 rounded-2xl flex justify-center items-center">
+            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
               In Progress - {inProgress}
             </div>
-            <div className="border-3 h-60 rounded-2xl flex justify-center items-center">
+            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
               Resolved - {resolved}
             </div>
-            <div className="border-3 h-60 rounded-2xl flex justify-center items-center">
+            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
               Rejected - {rejected}
             </div>
           </div>
           <div className="mt-12">
-            <h2 className="text-2xl font-semibold mb-5">
+            <h2 className="text-2xl font-bold mb-5 text-green-700">
               Recent Complaints
             </h2>
             {loading ? (

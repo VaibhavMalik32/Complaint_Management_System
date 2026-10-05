@@ -114,11 +114,11 @@ const AddAdmin = () => {
   };
 
   return (
-    <div className="flex min-h-screen w-screen items-center justify-center bg-gray-100 p-6">
-      <div className="w-full max-w-4xl rounded-2xl border bg-white p-6">
+    <div className="flex min-h-screen w-screen items-center justify-center bg-green-50 p-6">
+      <div className="w-full max-w-4xl rounded-2xl border bg-green-100 p-6">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-green-800">
               Create Admin
             </h1>
           </div>
@@ -145,11 +145,11 @@ const AddAdmin = () => {
 
         <form
           onSubmit={handleSubmit}
-          className="rounded-xl bg-white p-2"
+          className="rounded-xl p-2 bg-green-100"
         >
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Username
               </label>
 
@@ -160,11 +160,11 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter username"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Full Name
               </label>
 
@@ -175,12 +175,12 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter full name"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Email
               </label>
 
@@ -192,7 +192,7 @@ const AddAdmin = () => {
                   onChange={handleChange}
                   required
                   placeholder="Enter admin email"
-                  className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                  className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
                 />
 
                 {!emailVerified ? (
@@ -213,7 +213,7 @@ const AddAdmin = () => {
 
             {showOTP && !emailVerified && (
               <div className="md:col-span-2">
-                <label className="mb-1 block font-medium text-gray-700">
+                <label className="mb-1 block font-medium text-green-700">
                   Enter OTP
                 </label>
 
@@ -230,7 +230,7 @@ const AddAdmin = () => {
                         setOtp(value);
                       }
                     }}
-                    className="w-48 rounded-lg border px-3 py-2 outline-none"
+                    className="w-48 rounded-lg border px-3 py-2 outline-none bg-green-200"
                   />
 
                   <button
@@ -244,7 +244,7 @@ const AddAdmin = () => {
               </div>
             )}
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Password
               </label>
 
@@ -255,11 +255,11 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter password"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Phone
               </label>
 
@@ -271,12 +271,12 @@ const AddAdmin = () => {
                 required
                 maxLength="10"
                 placeholder="Enter phone number"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
 
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Department
               </label>
 
@@ -285,7 +285,7 @@ const AddAdmin = () => {
                 value={formData.department}
                 onChange={handleChange}
                 required
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none text-black bg-green-200"
               >
                 <option value="">
                   Select Department
@@ -333,7 +333,7 @@ const AddAdmin = () => {
               </select>
             </div>
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Post
               </label>
 
@@ -344,12 +344,12 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="e.g. Department Admin"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
 
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 City
               </label>
 
@@ -360,12 +360,12 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter city"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
 
             <div>
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 State
               </label>
 
@@ -376,12 +376,12 @@ const AddAdmin = () => {
                 onChange={handleChange}
                 required
                 placeholder="Enter state"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="mb-1 block font-medium text-gray-700">
+              <label className="mb-1 block font-medium text-green-700">
                 Address
               </label>
 
@@ -392,7 +392,7 @@ const AddAdmin = () => {
                 required
                 rows="3"
                 placeholder="Enter admin address"
-                className="w-full rounded-lg border px-4 py-2.5 outline-none"
+                className="w-full rounded-lg border px-4 py-2.5 outline-none bg-green-200"
               />
             </div>
           </div>

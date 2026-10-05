@@ -35,7 +35,7 @@ function Login() {
     <div className="flex">
       <div className="h-120 w-full justify-center items-center flex ml-20">
         <div>
-          <h1 className="text-4xl font-bold">Complaint Management System</h1><br />
+          <h1 className="text-4xl font-bold text-green-600">Complaint Management System</h1><br />
           <h1 className="text-xl">A centralized platform for efficient complaint management and resolution.</h1><br />
           <p>Access your account to submit complaints, track their progress, view updates, and monitor actions taken toward resolution.</p><br />
           <ol className="list-disc ml-4">
@@ -47,7 +47,7 @@ function Login() {
       </div>
       <div className="h-full w-full justify-center items-center flex mt-25">
         <div className="h-100 w-100 border rounded-2xl">
-          <h1 className="text-center font-bold text-3xl mt-5">
+          <h1 className="text-center font-bold text-3xl mt-5 text-green-600">
             Login
           </h1>
           <div className="h-60 justify-center items-center flex">
@@ -70,7 +70,7 @@ function Login() {
               <br />
               <button
                 type="submit"
-                className="cursor-pointer w-70 h-10 rounded outline"
+                className="cursor-pointer w-70 h-10 rounded outline hover:bg-green-500 hover:text-black "
               >
                 Login
               </button>

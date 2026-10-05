@@ -61,19 +61,19 @@ function UserComplaints() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 p-6 md:p-10">
+    <div className="min-h-screen w-full bg-green-50 p-6 md:p-10">
       <div className="mx-auto w-full max-w-5xl">
 
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-3xl font-bold text-gray-800">
+            <h1 className="text-3xl font-bold text-green-800">
               My Complaints
             </h1>
           </div>
 
           <button
             onClick={() => navigate("/home/create-complaint")}
-            className="rounded-xl bg-black px-5 py-3 font-semibold text-white"
+            className="rounded-xl bg-green-400 px-5 py-3 font-semibold text-green-700"
           >
             + Add Complaint
           </button>
@@ -86,16 +86,16 @@ function UserComplaints() {
         )}
 
         {loading && (
-          <div className="rounded-2xl border bg-white p-10 text-center shadow-sm">
-            <p className="text-gray-500">
+          <div className="rounded-2xl border bg-green-400 p-10 text-center shadow-sm">
+            <p className="text-green-500">
               Loading your complaints...
             </p>
           </div>
         )}
 
         {!loading && complaints.length === 0 && (
-          <div className="rounded-2xl border bg-white p-10 text-center shadow-sm md:p-14">
-            <h2 className="text-xl font-semibold text-gray-800">
+          <div className="rounded-2xl border bg-green-400 p-10 text-center shadow-sm md:p-14">
+            <h2 className="text-xl font-semibold text-green-800">
               No Complaints Yet
             </h2>
 
@@ -103,7 +103,7 @@ function UserComplaints() {
               onClick={() =>
                 navigate("/home/create-complaint")
               }
-              className="mt-6 rounded-xl bg-black px-6 py-3 font-semibold text-white cursor-pointer"
+              className="mt-6 rounded-xl bg-green-400 px-6 py-3 font-semibold text-green-700 cursor-pointer"
             >
               Submit Complaint
             </button>
@@ -115,14 +115,14 @@ function UserComplaints() {
             {complaints.map((complaint) => (
               <div
                 key={complaint.complaint_id}
-                className="rounded-2xl border bg-white p-6 shadow-sm transition hover:shadow-md"
+                className="rounded-2xl border bg-green-100 p-6 shadow-sm transition hover:shadow-md"
               >
 
                 <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
 
                   <div>
                     <div className="flex flex-wrap items-center gap-3">
-                      <label className="text-xl font-bold">
+                      <label className="text-xl font-bold text-green-800">
                         Title -
                       </label>
 
@@ -147,7 +147,7 @@ function UserComplaints() {
                 </div>
 
                 <div className="mt-4">
-                  <label className="font-bold text-xl">
+                  <label className="font-bold text-xl text-green-800">
                     Description -
                   </label>
 
@@ -157,7 +157,7 @@ function UserComplaints() {
                 </div>
 
                 <div className="mt-4 flex">
-                  <label className="font-bold text-xl">
+                  <label className="font-bold text-xl text-green-800">
                     Complaint Location -
                   </label>
                   <p className="mt-1 ml-1 text-gray-700">
@@ -166,7 +166,7 @@ function UserComplaints() {
                 </div>
                 <br />
                 <div className="flex">
-                  <h1 className="font-bold text-xl">Assigned to -</h1>
+                  <h1 className="font-bold text-xl text-green-800">Assigned to -</h1>
                   <p className="mt-1 ml-1">{complaint.employee_name || "Not Assigned"}</p>
                 </div>
                 <div className="mt-6 flex flex-col justify-between gap-4 border-t border-gray-100 pt-4 sm:flex-row sm:items-center">

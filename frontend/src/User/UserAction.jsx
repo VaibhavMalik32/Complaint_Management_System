@@ -30,7 +30,7 @@ function UserAction() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-green-50">
       <div className="border-b px-8 py-4">
         <h1 className="text-center text-3xl font-semibold">
           Action Taken
@@ -42,14 +42,14 @@ function UserAction() {
             {error}
           </div>
         ) : action ? (
-          <div className="rounded-2xl border p-8">
+          <div className="rounded-2xl border p-8 bg-green-200">
             <div className="mb-6">
-              <p className="text-sm text-black">
-                Complaint ID - {action.complaint_id}
+              <p className="text-sm flex">
+                <h1 className="text-green-800">Complaint ID - </h1> {action.complaint_id}
               </p>
             </div>
             <div className="mb-6">
-              <p className="mb-2 font-semibold">
+              <p className="mb-2 font-bold text-green-800">
                 Action Taken
               </p>
               <div className="rounded-xl border p-5">
@@ -74,7 +74,7 @@ function UserAction() {
             )}
             <button
               onClick={() => navigate("/home/complaints")}
-              className="rounded-xl bg-black px-6 py-3 font-semibold text-white"
+              className="rounded-xl border border-green-700 bg-green-200 px-6 py-3 font-semibold text-green-800 hover:bg-green-100"
             >
               Back to My Complaints
             </button>
