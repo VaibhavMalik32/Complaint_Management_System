@@ -17,20 +17,24 @@ function AllComplaints() {
   const fetchComplaints = async () => {
     try {
       const data = await getSuperAdminAllComplaints();
+
       setComplaints(data);
 
       const actionData = {};
 
-      for (const complaint of data) {
-        try {
-          const action = await getSuperAdminComplaintAction(
-            complaint.complaint_id
-          );
-          actionData[complaint.complaint_id] = action;
-        } catch {
-          actionData[complaint.complaint_id] = null;
-        }
-      }
+      await Promise.all(
+        data.map(async (complaint) => {
+          try {
+            const action = await getSuperAdminComplaintAction(
+              complaint.complaint_id
+            );
+
+            actionData[complaint.complaint_id] = action;
+          } catch {
+            actionData[complaint.complaint_id] = null;
+          }
+        })
+      );
 
       setActions(actionData);
     } catch (error) {
@@ -58,43 +62,49 @@ function AllComplaints() {
 
   if (loading) {
     return (
-      <div className="p-8">
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
         <p>Loading complaints...</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 min-h-screen bg-green-50 p-8">
+    <div className="flex-1 min-h-screen bg-slate-50 p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-green-800">
+        <h1 className="text-3xl font-bold text-black">
           All Complaints
         </h1>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-green-200">
+            <thead className="bg-slate-100">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Title
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Category
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Employee
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Status
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Action
                 </th>
+
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Date
                 </th>
@@ -118,7 +128,7 @@ function AllComplaints() {
                   return (
                     <tr
                       key={complaint.complaint_id}
-                      className="border-t bg-green-50"
+                      className="border-t bg-slate-50"
                     >
                       <td className="px-6 py-4">
                         {complaint.complaint_id}
@@ -144,7 +154,7 @@ function AllComplaints() {
 
                       <td className="px-6 py-4">
                         <span
-                          className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(
+                          className={`rounded-full px-3 py-1 text-xs font-medium ${getStatusClass(
                             complaint.status
                           )}`}
                         >
@@ -161,18 +171,18 @@ function AllComplaints() {
                                 action,
                               })
                             }
-                            className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm hover:bg-gray-800"
+                            className="rounded-lg bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-800"
                           >
                             View Action
                           </button>
                         ) : (
-                          <span className="text-gray-400 text-sm">
+                          <span className="text-sm text-gray-400">
                             No Action
                           </span>
                         )}
                       </td>
 
-                      <td className="px-6 py-4 text-sm text-black">
+                      <td className="px-6 py-4 text-sm">
                         {complaint.created_at
                           ? new Date(
                               complaint.created_at
@@ -189,16 +199,16 @@ function AllComplaints() {
       </div>
 
       {selectedComplaint && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center p-4 z-50">
-          <div className="bg-green-100 rounded-2xl w-full max-w-2xl p-6">
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-xl font-bold text-green-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
+          <div className="w-full max-w-2xl rounded-2xl bg-slate-100 p-6">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="text-xl font-bold text-black">
                 Complaint Action
               </h2>
 
               <button
                 onClick={() => setSelectedComplaint(null)}
-                className="text-gray-500 hover:text-gray-800 text-xl"
+                className="text-xl text-gray-500 hover:text-gray-800"
               >
                 ×
               </button>
@@ -206,42 +216,54 @@ function AllComplaints() {
 
             <div className="space-y-4">
               <div className="flex">
-                <p className="text-sm font-bold text-green-700">Complaint - </p>
-                <p className="-mt-0.5 ml-1">
+                <p className="text-sm font-bold text-black">
+                  Complaint -
+                </p>
+
+                <p className="ml-1">
                   {selectedComplaint.complaint.title}
                 </p>
               </div>
 
               <div className="flex">
-                <p className="text-sm font-bold text-green-700">Employee - </p>
-                <p className="-mt-0.5 ml-1">
+                <p className="text-sm font-bold text-black">
+                  Employee -
+                </p>
+
+                <p className="ml-1">
                   Employee {selectedComplaint.action.employee_id}
                 </p>
               </div>
 
               <div>
-                <p className="text-sm font-bold text-green-700">Action Taken</p>
-                <p className="mt-1 bg-green-50 border  rounded-xl p-4">
+                <p className="text-sm font-bold text-black">
+                  Action Taken
+                </p>
+
+                <p className="mt-1 rounded-xl border bg-slate-50 p-4">
                   {selectedComplaint.action.action_taken}
                 </p>
               </div>
 
               {selectedComplaint.action.proof_image && (
                 <div>
-                  <p className="text-sm text-green-700 mb-2">
+                  <p className="mb-2 text-sm text-green-700">
                     Proof Image
                   </p>
 
                   <img
                     src={`${import.meta.env.VITE_BACKEND_URL}${selectedComplaint.action.proof_image}`}
                     alt="Action proof"
-                    className="w-full max-h-96 object-contain rounded-xl border"
+                    className="max-h-96 w-full rounded-xl border object-contain"
                   />
                 </div>
               )}
 
               <div>
-                <p className="text-sm text-green-700 font-bold">Action Date</p>
+                <p className="text-sm font-bold text-black">
+                  Action Date
+                </p>
+
                 <p>
                   {selectedComplaint.action.created_at
                     ? new Date(
@@ -254,7 +276,7 @@ function AllComplaints() {
 
             <button
               onClick={() => setSelectedComplaint(null)}
-              className="mt-6 w-full text-black py-3 rounded-xl hover:bg-black hover:text-white border"
+              className="mt-6 w-full rounded-xl border py-3 text-black hover:bg-black hover:text-white"
             >
               Close
             </button>

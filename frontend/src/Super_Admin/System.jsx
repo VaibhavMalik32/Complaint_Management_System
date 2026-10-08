@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   getSuperAdminUsers,
   getSuperAdminEmployees,
@@ -6,11 +7,14 @@ import {
 } from "../api";
 
 function System() {
-  const [activeTab, setActiveTab] = useState("users");
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [users, setUsers] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const activeTab = searchParams.get("tab") || "users";
 
   useEffect(() => {
     fetchSystemData();
@@ -18,6 +22,8 @@ function System() {
 
   const fetchSystemData = async () => {
     try {
+      setLoading(true);
+
       const [userData, employeeData, adminData] = await Promise.all([
         getSuperAdminUsers(),
         getSuperAdminEmployees(),
@@ -34,98 +40,98 @@ function System() {
     }
   };
 
+  const changeTab = (tab) => {
+    setSearchParams({ tab });
+  };
+
   const getData = () => {
     if (activeTab === "users") return users;
     if (activeTab === "employees") return employees;
-    return admins;
+    if (activeTab === "admins") return admins;
+    return users;
   };
 
   const data = getData();
 
   if (loading) {
     return (
-      <div className="p-8">
-        <p>Loading system data...</p>
+      <div className="flex min-h-screen items-center justify-center bg-slate-50">
+        <p className="text-lg text-green-800">
+          Loading system data...
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 min-h-screen bg-green-50 p-8">
+    <div className="flex-1 min-h-screen bg-slate-50 p-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-green-800">
+        <h1 className="text-3xl font-bold text-black">
           System
         </h1>
       </div>
 
-      <div className="flex gap-3 mb-6">
+      <div className="mb-6 flex gap-3">
         <button
-          onClick={() => setActiveTab("users")}
-          className={`px-5 py-3 rounded-xl ${
+          onClick={() => changeTab("users")}
+          className={`rounded-xl px-5 py-3 ${
             activeTab === "users"
-              ? "bg-green-900 text-white"
-              : "bg-green-100 border text-green-700"
+              ? "bg-stone-500 text-white"
+              : "border bg-slate-100 text-slate-700"
           }`}
         >
           Users ({users.length})
         </button>
 
         <button
-          onClick={() => setActiveTab("employees")}
-          className={`px-5 py-3 rounded-xl ${
+          onClick={() => changeTab("employees")}
+          className={`rounded-xl px-5 py-3 ${
             activeTab === "employees"
-              ? "bg-green-900 text-white"
-              : "bg-green-100 border text-green-700"
+              ? "bg-stone-500 text-white"
+              : "border bg-slate-100 text-slate-700"
           }`}
         >
           Employees ({employees.length})
         </button>
 
         <button
-          onClick={() => setActiveTab("admins")}
-          className={`px-5 py-3 rounded-xl ${
+          onClick={() => changeTab("admins")}
+          className={`rounded-xl px-5 py-3 ${
             activeTab === "admins"
-              ? "bg-green-900 text-white"
-              : "bg-green-100 border text-green-700"
+              ? "bg-stone-500 text-white"
+              : "border bg-slate-100 text-slate-700"
           }`}
         >
           Admins ({admins.length})
         </button>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+      <div className="overflow-hidden rounded-2xl border bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-green-100">
+            <thead className="bg-slate-100">
               <tr>
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   ID
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Username
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Full Name
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Email
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Phone
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   City
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   State
                 </th>
-
                 <th className="px-6 py-4 text-left text-sm font-semibold">
                   Address
                 </th>
@@ -146,7 +152,7 @@ function System() {
                 data.map((item) => (
                   <tr
                     key={item.user_id}
-                    className="border-t bg-green-50"
+                    className="border-t bg-slate-50"
                   >
                     <td className="px-6 py-4">
                       {item.user_id}
@@ -169,15 +175,15 @@ function System() {
                     </td>
 
                     <td className="px-6 py-4">
-                      {item.address || "-"}
-                    </td>
-
-                    <td className="px-6 py-4">
                       {item.city || "-"}
                     </td>
 
                     <td className="px-6 py-4">
                       {item.state || "-"}
+                    </td>
+
+                    <td className="px-6 py-4">
+                      {item.address || "-"}
                     </td>
                   </tr>
                 ))

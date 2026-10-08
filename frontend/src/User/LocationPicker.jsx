@@ -246,11 +246,11 @@ function LocationPicker({ onLocationSelect, onClose }) {
 
         <div className="flex items-center justify-between border-b px-6 py-4">
           <div>
-            <h2 className="text-xl font-bold text-green-700">
+            <h2 className="text-xl font-bold text-black">
               Select Complaint Location
             </h2>
 
-            <p className="text-sm text-green-600">
+            <p className="text-sm text-black">
               Search, detect your location or select a point on the map
             </p>
           </div>
@@ -258,7 +258,7 @@ function LocationPicker({ onLocationSelect, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="text-2xl text-green-500 hover:text-green"
+            className="text-2xl text-black hover:text-gray-500"
           >
             ×
           </button>
@@ -279,14 +279,14 @@ function LocationPicker({ onLocationSelect, onClose }) {
                 }}
                 onKeyDown={handleSearchKeyDown}
                 placeholder="Search a place, area, landmark..."
-                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-green-500"
+                className="flex-1 rounded-xl border border-gray-300 px-4 py-3 outline-none focus:border-black"
               />
 
               <button
                 type="button"
                 onClick={searchPlace}
                 disabled={loadingSearch}
-                className="rounded-xl bg-green-400 px-5 py-3 font-semibold text-black transition hover:bg-green-500 disabled:opacity-50"
+                className="rounded-xl bg-slate-300 px-5 py-3 font-semibold text-black transition disabled:opacity-50"
               >
                 {loadingSearch
                   ? "Searching..."
@@ -319,7 +319,7 @@ function LocationPicker({ onLocationSelect, onClose }) {
             type="button"
             onClick={detectLocation}
             disabled={loadingLocation}
-            className="rounded-xl bg-green-400 px-5 py-3 font-semibold text-black transition hover:bg-green-500 disabled:opacity-50"
+            className="rounded-xl bg-slate-300 px-5 py-3 font-semibold text-black transition disabled:opacity-50"
           >
             {loadingLocation
               ? "Detecting Location..."
@@ -327,14 +327,14 @@ function LocationPicker({ onLocationSelect, onClose }) {
           </button>
 
           {position && (
-            <div className="mt-3 text-sm text-green-600">
+            <div className="mt-3 text-sm text-black">
               Latitude: {position[0].toFixed(6)} | Longitude:{" "}
               {position[1].toFixed(6)}
             </div>
           )}
 
           {loadingAddress && (
-            <p className="mt-2 text-sm text-green-500">
+            <p className="mt-2 text-sm text-black">
               Finding address...
             </p>
           )}
@@ -377,7 +377,7 @@ function LocationPicker({ onLocationSelect, onClose }) {
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl border border-gray-300 px-5 py-3 font-medium text-green-700 hover:bg-green-100"
+            className="rounded-xl border border-gray-300 px-5 py-3 font-medium text-black hover:bg-slate-200"
           >
             Cancel
           </button>
@@ -386,7 +386,7 @@ function LocationPicker({ onLocationSelect, onClose }) {
             type="button"
             onClick={handleConfirm}
             disabled={!position || loadingAddress}
-            className="rounded-xl bg-green-200 px-6 py-3 font-semibold text-green-800 disabled:opacity-50 hover:bg-green-100"
+            className="rounded-xl bg-slate-300 px-6 py-3 font-semibold text-black disabled:opacity-50 hover:bg-slate-200"
           >
             {loadingAddress
               ? "Getting Address..."

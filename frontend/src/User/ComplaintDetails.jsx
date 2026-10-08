@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getComplaint, getComplaintHistory } from "../api.js";
+import { API_URL,getComplaint, getComplaintHistory } from "../api.js";
 
 function ComplaintDetails() {
   const { complaintId } = useParams();
@@ -54,7 +54,7 @@ function ComplaintDetails() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-green-50">
+    <div className="min-h-screen w-full bg-stone-50">
       <div className="border-b px-8 py-4">
         <h1 className="text-center text-3xl font-semibold">
           Complaint Details
@@ -62,10 +62,10 @@ function ComplaintDetails() {
       </div>
 
       <div className="mx-auto max-w-4xl px-8 py-10 ">
-        <div className="rounded-2xl border p-8 bg-green-200">
+        <div className="rounded-2xl border p-8 bg-slate-100">
           <div className="mb-6 flex items-start justify-between">
             <div>
-              <h2 className="text-2xl font-bold text-green-800">
+              <h2 className="text-2xl font-bold text-black">
                 Title - {complaint.title}
               </h2>
             </div>
@@ -78,12 +78,12 @@ function ComplaintDetails() {
           <div className="mt-6 border-t pt-6 ">
             <div className="mb-5">
               <p className="font-semibold flex">
-                <h1 className="text-green-800">Category - </h1> {complaint.category}
+                <h1 className="text-black">Category - </h1> {complaint.category}
               </p>
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold text-green-800">Complaint Location</p>
+              <p className="font-semibold text-black">Complaint Location</p>
               <p className="mt-1">{complaint.location || "N/A"}</p>
 
               {complaint.latitude != null &&
@@ -100,14 +100,14 @@ function ComplaintDetails() {
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold text-green-800">Description</p>
+              <p className="font-semibold text-black">Description</p>
               <p className="mt-1 whitespace-pre-wrap">
                 {complaint.description}
               </p>
             </div>
 
             <div className="mb-5">
-              <p className="font-semibold text-green-800">
+              <p className="font-semibold text-black">
                 Submitted On -{" "}
                 {complaint.created_at
                   ? new Date(complaint.created_at).toLocaleDateString()
@@ -117,7 +117,7 @@ function ComplaintDetails() {
           </div>
 
           <div className="mt-6 border-t pt-6">
-            <h3 className="mb-5 text-xl font-bold text-green-800">
+            <h3 className="mb-5 text-xl font-bold text-black">
               Evidence Images
             </h3>
 
@@ -129,21 +129,21 @@ function ComplaintDetails() {
                     className="rounded-xl border p-3"
                   >
                     <img
-                      src={`${import.meta.env.VITE_BACKEND_URL}${image.image_path}`}
+                      src={`${API_URL}${image.image_path}`}
                       alt="Complaint evidence"
-                      className="h-64 w-full rounded-lg object-cover"
+                      className="h-64 w-full rounded-lg"
                     />
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-green-800 font-bold">No images available.</p>
+              <p className="text-black font-bold">No images available.</p>
             )}
           </div>
 
           {showHistory && (
             <div className="mt-8 border-t pt-6">
-              <h3 className="mb-6 text-xl font-bold text-green-800">
+              <h3 className="mb-6 text-xl font-bold text-stone`-800">
                 Complaint History
               </h3>
 
@@ -157,28 +157,28 @@ function ComplaintDetails() {
                         key={item.update_id}
                         className="relative flex gap-5"
                       >
-                        <div className="relative z-10 mt-1 h-7 w-7 shrink-0 rounded-full border-4 border-white bg-green-300" />
+                        <div className="relative z-10 mt-1 h-7 w-7 shrink-0 rounded-full border-4 border-white bg-slate-300" />
 
-                        <div className="flex-1 rounded-xl border p-5 bg-green-400">
+                        <div className="flex-1 rounded-xl border p-5 bg-slate-300">
                           <div className="flex flex-col gap-1">
                             <p className="text-lg font-semibold">
                               {item.action || "Status Changed"}
                             </p>
 
                             {item.action === "Complaint Submitted" ? (
-                              <p className="text-sm text-green-800">
+                              <p className="text-sm text-black">
                                 Complaint Submitted
                               </p>
                             ) : item.action === "Assigned" ? (
                               <>
-                                <p className="text-sm text-green-800">
+                                <p className="text-sm text-black">
                                   Assigned to{" "}
                                   <span className="font-semibold">
                                     {item.assigned_to_name || "Employee"}
                                   </span>
                                 </p>
 
-                                <p className="text-sm text-green-800">
+                                <p className="text-sm text-black">
                                   By:{" "}
                                   <span className="font-medium">
                                     {item.performed_by_name || "Admin"}
@@ -187,7 +187,7 @@ function ComplaintDetails() {
                               </>
                             ) : (
                               <>
-                                <p className="text-sm text-green-800">
+                                <p className="text-sm text-black">
                                   Status:{" "}
                                   <span className="font-medium">
                                     {item.old_status}
@@ -198,7 +198,7 @@ function ComplaintDetails() {
                                   </span>
                                 </p>
 
-                                <p className="text-sm text-green-800">
+                                <p className="text-sm text-black">
                                   By:{" "}
                                   <span className="font-medium">
                                     {item.performed_by_name || "User"}
@@ -207,7 +207,7 @@ function ComplaintDetails() {
                               </>
                             )}
 
-                            <p className="mt-2 text-sm text-green-800">
+                            <p className="mt-2 text-sm text-stone-800">
                               {item.updated_at
                                 ? new Date(item.updated_at).toLocaleString(
                                     "en-IN",
@@ -229,7 +229,7 @@ function ComplaintDetails() {
                   </div>
                 </div>
               ) : (
-                <p className="text-green-800">
+                <p className="text-stone-800">
                   No complaint history available.
                 </p>
               )}
@@ -239,14 +239,14 @@ function ComplaintDetails() {
           <div className="mt-8 flex gap-4">
             <button
               onClick={() => navigate("/home/complaints")}
-              className="rounded-xl border border-green-700 px-5 py-3 font-medium text-green-800 hover:bg-green-100"
+              className="rounded-xl border border-stone-500 px-5 py-3 font-medium text-stone-500"
             >
               Back to Complaints
             </button>
 
             <button
               onClick={() => setShowHistory((prev) => !prev)}
-              className="rounded-xl bg-green-700 px-5 py-3 font-medium text-white hover:bg-green-600"
+              className="rounded-xl bg-stone-500 px-5 py-3 font-medium text-white"
             >
               {showHistory ? "Hide Complaint History" : "Complaint History"}
             </button>

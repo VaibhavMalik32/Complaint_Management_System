@@ -1,9 +1,13 @@
 import { getMyComplaints } from "../api.js";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function UserDashboard() {
+function UserHomePage() {
+  const navigate = useNavigate();
+
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
+
   const fetchComplaints = async () => {
     try {
       setLoading(true);
@@ -15,58 +19,92 @@ function UserDashboard() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchComplaints();
   }, []);
+
   const total = complaints.length;
+
   const inReview = complaints.filter(
     (c) => c.status === "In Review"
   ).length;
+
   const inProgress = complaints.filter(
     (c) => c.status === "In Progress"
   ).length;
+
   const resolved = complaints.filter(
     (c) => c.status === "Resolved"
   ).length;
+
   const rejected = complaints.filter(
     (c) => c.status === "Rejected"
   ).length;
+
   const recentComplaints = [...complaints]
     .sort(
       (a, b) =>
         new Date(b.created_at) - new Date(a.created_at)
     )
     .slice(0, 3);
+
+  const complaintCard = (label, value, status) => (
+    <button
+      onClick={() =>
+        navigate(`/home/complaints?status=${encodeURIComponent(status)}`)
+      }
+      className="h-30 rounded-2xl border-2 flex items-center justify-center"
+    >
+      {label} - {value}
+    </button>
+  );
+
   return (
-    <div className="w-full min-h-screen bg-green-50">
+    <div className="w-full min-h-screen bg-slate-100/50">
       <div className="w-full">
         <div className="border p-4">
-          <h1 className="text-3xl text-center font-bold text-green-700">
+          <h1 className="text-3xl text-center font-bold text-black">
             Complaint Management System
           </h1>
         </div>
-        <div className="p-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
-            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
-              Total - {total}
-            </div>
-            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
-              In Review - {inReview}
-            </div>
-            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
-              In Progress - {inProgress}
-            </div>
-            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
-              Resolved - {resolved}
-            </div>
-            <div className="border-3 h-40 rounded-2xl flex justify-center items-center">
-              Rejected - {rejected}
-            </div>
+
+        <div className="p-8 flex">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 w-100 gap-8">
+
+            {complaintCard("Total", total, "all")}
+
+            {complaintCard(
+              "In Review",
+              inReview,
+              "In Review"
+            )}
+
+            {complaintCard(
+              "In Progress",
+              inProgress,
+              "In Progress"
+            )}
+
+            {complaintCard(
+              "Resolved",
+              resolved,
+              "Resolved"
+            )}
+
+            {complaintCard(
+              "Rejected",
+              rejected,
+              "Rejected"
+            )}
+
           </div>
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold mb-5 text-green-700">
+
+          <div className="ml-20">
+            <h2 className="text-2xl font-bold mb-5 text-black">
               Recent Complaints
             </h2>
+
             {loading ? (
               <div className="border rounded-xl p-8 text-center">
                 Loading complaints...
@@ -79,24 +117,29 @@ function UserDashboard() {
               <div className="overflow-x-auto border rounded-xl">
                 <table className="w-full">
                   <thead>
-                    <tr className="border-b">
+                    <tr className="border-b bg-slate-100">
                       <th className="text-left px-5 py-4">
                         ID
                       </th>
+
                       <th className="text-left px-5 py-4">
                         Title
                       </th>
+
                       <th className="text-left px-5 py-4">
                         Category
                       </th>
+
                       <th className="text-left px-5 py-4">
                         Status
                       </th>
+
                       <th className="text-left px-5 py-4">
                         Date
                       </th>
                     </tr>
                   </thead>
+
                   <tbody>
                     {recentComplaints.map((complaint) => (
                       <tr
@@ -106,15 +149,19 @@ function UserDashboard() {
                         <td className="px-5 py-4">
                           {complaint.complaint_id}
                         </td>
+
                         <td className="px-5 py-4">
                           {complaint.title}
                         </td>
+
                         <td className="px-5 py-4">
                           {complaint.category}
                         </td>
+
                         <td className="px-5 py-4">
                           {complaint.status}
                         </td>
+
                         <td className="px-5 py-4">
                           {complaint.created_at
                             ? new Date(
@@ -135,4 +182,4 @@ function UserDashboard() {
   );
 }
 
-export default UserDashboard;
+export default UserHomePage;

@@ -32,10 +32,10 @@ function Login() {
   };
 
   return (
-    <div className="flex">
+    <div className="flex bg-stone-50 min-h-screen">
       <div className="h-120 w-full justify-center items-center flex ml-20">
         <div>
-          <h1 className="text-4xl font-bold text-green-600">Complaint Management System</h1><br />
+          <h1 className="text-4xl font-bold text-stone-800">Complaint Management System</h1><br />
           <h1 className="text-xl">A centralized platform for efficient complaint management and resolution.</h1><br />
           <p>Access your account to submit complaints, track their progress, view updates, and monitor actions taken toward resolution.</p><br />
           <ol className="list-disc ml-4">
@@ -46,8 +46,8 @@ function Login() {
         </div>
       </div>
       <div className="h-full w-full justify-center items-center flex mt-25">
-        <div className="h-100 w-100 border rounded-2xl">
-          <h1 className="text-center font-bold text-3xl mt-5 text-green-600">
+        <div className="h-100 w-100 border rounded-2xl bg-slate-100">
+          <h1 className="text-center font-bold text-3xl mt-5 text-stone-800">
             Login
           </h1>
           <div className="h-60 justify-center items-center flex">
@@ -57,7 +57,7 @@ function Login() {
                 placeholder="Enter username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-70 outline rounded mb-2 pl-3"
+                className="w-70 outline rounded mb-2 pl-3 bg-stone-50"
               />
               <br />
               <input
@@ -65,12 +65,12 @@ function Login() {
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-70 outline rounded mb-2 pl-3"
+                className="w-70 outline rounded mb-2 pl-3 bg-stone-50"
               />
               <br />
               <button
                 type="submit"
-                className="cursor-pointer w-70 h-10 rounded outline hover:bg-green-500 hover:text-black "
+                className="cursor-pointer w-70 h-10 rounded outline hover:bg-black hover:text-white bg-stone-50"
               >
                 Login
               </button>

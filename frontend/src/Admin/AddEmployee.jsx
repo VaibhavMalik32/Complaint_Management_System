@@ -136,7 +136,7 @@ const AddEmployee = () => {
   };
   if (loadingAdmin) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-100">
+      <div className="flex min-h-screen items-center justify-center bg-stone-100">
         <p className="text-gray-600">
           Loading admin information...
         </p>
@@ -144,12 +144,12 @@ const AddEmployee = () => {
     );
   }
   return (
-    <div className="h-screen w-screen justify-center items-center flex bg-green-50">
-        <div className="min-h-screen border rounded-2xl p-6 mt-20 bg-green-50">
-        <div className="mx-auto max-w-4xl bg-green-50">
-            <div className="mb-6 flex items-center justify-between bg-green-50">
+    <div className="h-screen w-screen justify-center items-center flex bg-stone-50">
+        <div className="min-h-screen border rounded-2xl p-6 mt-20 bg-stone-100">
+        <div className="mx-auto max-w-4xl bg-stone-100">
+            <div className="mb-6 flex items-center justify-between bg-stone-100">
             <div>
-                <h1 className="text-2xl font-bold text-green-800">
+                <h1 className="text-2xl font-bold text-stone-800">
                 Add Employee
                 </h1>
             </div>
@@ -173,11 +173,11 @@ const AddEmployee = () => {
 
             <form
             onSubmit={handleSubmit}
-            className="rounded-xl bg-green-50 p-6"
+            className="rounded-xl bg-stone-100 p-6"
             >
             <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-stone-700">
                     Username
                 </label>
                 <input
@@ -187,11 +187,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter username"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-stone-800">
                     Full Name
                 </label>
 
@@ -202,11 +202,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter full name"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-stone-800">
                     Email
                 </label>
                 <div className="flex items-center gap-2">
@@ -217,7 +217,7 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter employee email"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                     />
                     {!emailVerified ? (
                     <button
@@ -236,7 +236,7 @@ const AddEmployee = () => {
                 </div>
                 {showOTP && !emailVerified && (
                 <div className="md:col-span-2">
-                    <label className="mb-1 block text-sm font-medium text-green-700">
+                    <label className="mb-1 block text-sm font-medium text-slate-800">
                     Enter OTP
                     </label>
                     <div className="flex gap-2">
@@ -252,7 +252,7 @@ const AddEmployee = () => {
                             setOtp(value);
                         }
                         }}
-                        className="w-48 rounded-lg border px-3 py-2 outline-none bg-green-200"
+                        className="w-48 rounded-lg border px-3 py-2 outline-none bg-slate-200"
                     />
 
                     <button
@@ -266,7 +266,7 @@ const AddEmployee = () => {
                 </div>
                 )}
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     Password
                 </label>
                 <input
@@ -276,11 +276,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter password"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     Phone
                 </label>
                 <input
@@ -291,11 +291,11 @@ const AddEmployee = () => {
                     required
                     maxLength="10"
                     placeholder="Enter phone number"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     Department
                 </label>
 
@@ -307,7 +307,7 @@ const AddEmployee = () => {
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     Post
                 </label>
                 <input
@@ -317,11 +317,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter employee post"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     City
                 </label>
                 <input
@@ -331,11 +331,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter city"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div>
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     State
                 </label>
                 <input
@@ -345,11 +345,11 @@ const AddEmployee = () => {
                     onChange={handleChange}
                     required
                     placeholder="Enter state"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
                 <div className="md:col-span-2">
-                <label className="mb-1 block text-sm font-medium text-green-700">
+                <label className="mb-1 block text-sm font-medium text-slate-800">
                     Address
                 </label>
 
@@ -360,7 +360,7 @@ const AddEmployee = () => {
                     required
                     rows="3"
                     placeholder="Enter employee address"
-                    className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                    className="w-full rounded-lg border px-3 py-2 outline-none bg-slate-200"
                 />
                 </div>
             </div>

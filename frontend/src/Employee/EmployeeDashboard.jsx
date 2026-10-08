@@ -3,8 +3,10 @@ import {
   updateComplaintStatus,
 } from "../api.js";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 function EmployeeDashboard() {
+  const navigate = useNavigate();
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -66,7 +68,7 @@ function EmployeeDashboard() {
   };
 
   return (
-    <div className="min-h-screen w-full bg-white">
+    <div className="min-h-screen w-full bg-stone-50">
 
       <div className="border-b px-8 py-4">
         <h1 className="text-center text-3xl font-semibold">
@@ -87,42 +89,55 @@ function EmployeeDashboard() {
             <p>Loading...</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+          <div className="flex">
+            <div className="grid grid-cols-1 gap-20 sm:grid-cols-2 lg:grid-cols-2">
 
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
-                <p className="text-lg">
-                  Total - {total}
-                </p>
+              <div
+                onClick={() => navigate("/employee/assigned-complaints")}
+                className="flex h-32 w-30 cursor-pointer items-center justify-center rounded-2xl border-2 hover:bg-stone-100"
+              >
+                <p className="text-lg">Total - {total}</p>
               </div>
 
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
-                <p className="text-lg">
-                  In Review - {inReview}
-                </p>
+              <div
+                onClick={() =>
+                  navigate("/employee/assigned-complaints?status=In%20Review")
+                }
+                className="flex h-32 w-30 cursor-pointer items-center justify-center rounded-2xl border-2 hover:bg-stone-100"
+              >
+                <p className="text-lg">In Review - {inReview}</p>
               </div>
 
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
-                <p className="text-lg">
-                  In Progress - {inProgress}
-                </p>
+              <div
+                onClick={() =>
+                  navigate("/employee/assigned-complaints?status=In%20Progress")
+                }
+                className="flex h-32 w-30 cursor-pointer items-center justify-center rounded-2xl border-2 hover:bg-stone-100"
+              >
+                <p className="text-lg">In Progress - {inProgress}</p>
               </div>
 
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
-                <p className="text-lg">
-                  Resolved - {resolved}
-                </p>
+              <div
+                onClick={() =>
+                  navigate("/employee/assigned-complaints?status=Resolved")
+                }
+                className="flex h-32 w-30 cursor-pointer items-center justify-center rounded-2xl border-2 hover:bg-stone-100"
+              >
+                <p className="text-lg">Resolved - {resolved}</p>
               </div>
 
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2">
-                <p className="text-lg">
-                  Rejected - {rejected}
-                </p>
+              <div
+                onClick={() =>
+                  navigate("/employee/assigned-complaints?status=Rejected")
+                }
+                className="flex h-32 w-30 cursor-pointer items-center justify-center rounded-2xl border-2 hover:bg-stone-100"
+              >
+                <p className="text-lg">Rejected - {rejected}</p>
               </div>
 
             </div>
 
-            <div className="mt-12">
+            <div className="ml-30">
 
               <h2 className="mb-5 text-2xl font-semibold">
                 Assigned Complaints
@@ -247,7 +262,7 @@ function EmployeeDashboard() {
               )}
 
             </div>
-          </>
+          </div>
         )}
 
       </div>

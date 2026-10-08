@@ -3,61 +3,96 @@ import {
   getAssignedComplaints,
   addComplaintAction,
 } from "../api.js";
+import { useParams, useNavigate } from "react-router-dom";
 
 function ComplaintAction() {
+  const { complaintId } = useParams();
+  const navigate = useNavigate();
+
   const [complaints, setComplaints] = useState([]);
-  const [selectedComplaint, setSelectedComplaint] = useState("");
+  const [selectedComplaint, setSelectedComplaint] = useState(
+    complaintId || ""
+  );
   const [actionTaken, setActionTaken] = useState("");
   const [proofImage, setProofImage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+
   const fetchComplaints = async () => {
     try {
       setLoading(true);
       setError("");
+
       const data = await getAssignedComplaints();
+
       setComplaints(data);
+
+      if (complaintId) {
+        const complaintExists = data.some(
+          (complaint) =>
+            String(complaint.complaint_id) ===
+            String(complaintId)
+        );
+
+        if (complaintExists) {
+          setSelectedComplaint(complaintId);
+        } else {
+          setError(
+            "Complaint not found or not assigned to you."
+          );
+        }
+      }
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchComplaints();
-  }, []);
+  }, [complaintId]);
+
   const selectedComplaintData = complaints.find(
     (complaint) =>
       String(complaint.complaint_id) ===
       String(selectedComplaint)
   );
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setError("");
     setSuccess("");
+
     if (!selectedComplaint) {
       setError("Please select a complaint.");
       return;
     }
+
     if (!actionTaken.trim()) {
       setError("Please enter the action taken.");
       return;
     }
+
     setSubmitting(true);
+
     try {
       await addComplaintAction(
         selectedComplaint,
         actionTaken,
         proofImage
       );
+
       setSuccess(
         "Complaint action added successfully."
       );
-      setSelectedComplaint("");
+
       setActionTaken("");
       setProofImage(null);
+
       await fetchComplaints();
     } catch (err) {
       setError(err.message);
@@ -79,9 +114,23 @@ function ComplaintAction() {
 
         <div className="rounded-2xl border p-8">
 
-          <h2 className="mb-6 text-2xl font-semibold">
-            Add Action
-          </h2>
+          <div className="mb-6 flex items-center justify-between">
+
+            <h2 className="text-2xl font-semibold">
+              Add Action
+            </h2>
+
+            <button
+              type="button"
+              onClick={() =>
+                navigate("/employee/assigned-complaints")
+              }
+              className="text-sm text-blue-600 hover:underline"
+            >
+              Back to Assigned Complaints
+            </button>
+
+          </div>
 
           {error && (
             <p className="mb-5 rounded-lg border border-red-200 bg-red-50 p-3 text-red-600">

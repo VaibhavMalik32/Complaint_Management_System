@@ -137,10 +137,10 @@ function Register() {
   };
 
   return (
-    <div className="flex">
-      <div className="h-120 w-full justify-center items-center flex ml-20">
+    <div className="flex bg-stone-50 min-h-screen w-full">
+      <div className="h-120 w-full justify-center items-center flex ml-20 ">
         <div>
-          <h1 className="text-4xl font-bold text-green-600 ">
+          <h1 className="text-4xl font-bold text-stone-800 ">
             Complaint Management System
           </h1>
           <br />
@@ -170,8 +170,8 @@ function Register() {
       </div>
 
       <div className="h-120 w-full justify-center items-center flex mt-25">
-        <div className="h-auto w-100 border rounded-2xl p-5">
-          <h1 className="text-center font-bold text-3xl mt-2 mb-6 text-green-600">
+        <div className="h-auto w-100 border rounded-2xl p-5 bg-slate-100">
+          <h1 className="text-center font-bold text-3xl mt-2 mb-6 text-stone-800">
             Register Form
           </h1>
 
@@ -182,7 +182,7 @@ function Register() {
               placeholder="Enter username"
               value={formData.username}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -205,7 +205,7 @@ function Register() {
               placeholder="Enter full name"
               value={formData.full_name}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -217,7 +217,7 @@ function Register() {
                 placeholder="Enter email"
                 value={formData.email}
                 onChange={handleChange}
-                className="w-70 outline rounded mb-3 pl-3 h-9"
+                className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
                 required
               />
 
@@ -225,7 +225,7 @@ function Register() {
                 <button
                   type="button"
                   onClick={handleSendOTP}
-                  className="w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-green-500 hover:text-black"
+                  className="w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-black hover:text-white"
                 >
                   Verify
                 </button>
@@ -250,13 +250,13 @@ function Register() {
                     }
                   }}
                   maxLength={6}
-                  className="w-47 outline rounded pl-3 h-9"
+                  className="w-47 outline rounded pl-3 h-9 bg-stone-50"
                 />
 
                 <button
                   type="button"
                   onClick={handleVerifyOTP}
-                  className="ml-2 w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-green-500 hover:text-black"
+                  className="ml-2 w-21 h-9 rounded outline cursor-pointer text-sm hover:bg-black hover:text-white"
                 >
                   Verify OTP
                 </button>
@@ -271,7 +271,7 @@ function Register() {
               placeholder="Enter phone number"
               value={formData.phone}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -282,7 +282,7 @@ function Register() {
               placeholder="Enter address"
               value={formData.address}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -293,7 +293,7 @@ function Register() {
               placeholder="Enter city"
               value={formData.city}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -304,7 +304,7 @@ function Register() {
               placeholder="Enter state"
               value={formData.state}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -315,7 +315,7 @@ function Register() {
               placeholder="Enter Password"
               value={formData.password}
               onChange={handleChange}
-              className="w-70 outline rounded mb-3 pl-3 h-9"
+              className="w-70 outline rounded mb-3 pl-3 h-9 bg-stone-50"
               required
             />
             <br />
@@ -343,7 +343,7 @@ function Register() {
             <button
               type="submit"
               disabled={!usernameValid || !passwordValid}
-              className="cursor-pointer w-70 h-10 rounded outline hover:bg-green-500 hover:text-black disabled:cursor-not-allowed"
+              className="cursor-pointer w-70 h-10 rounded outline bg-stone-50 hover:bg-black hover:text-white disabled:cursor-not-allowed"
             >
               Register
             </button>

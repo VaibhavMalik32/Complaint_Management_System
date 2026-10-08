@@ -31,6 +31,8 @@ import AddEmployee from './Admin/AddEmployee.jsx'
 import ManageEmployees from './Admin/ManageEmployees.jsx'
 import AddAdmin from './Super_Admin/AddAdmin.jsx'
 import ManageAdmins from './Super_Admin/ManageAdmins.jsx'
+import AssignedComplaints from './Employee/AssignedComplaints.jsx'
+import EmployeeComplaintDetails from "./Employee/EmployeeComplaintDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -119,7 +121,19 @@ const router = createBrowserRouter([
             element: <EmployeeDashboard />,
           },
           {
+            path: "assigned-complaints",
+            element: <AssignedComplaints />,
+          },
+          {
             path: "complaint-action",
+            element: <ComplaintAction />,
+          },
+          {
+            path: "complaints/:complaintId",
+            element: <EmployeeComplaintDetails />,
+          },
+          {
+            path: "complaints/:complaintId/action",
             element: <ComplaintAction />,
           },
         ],

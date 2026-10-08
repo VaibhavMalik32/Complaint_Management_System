@@ -66,16 +66,16 @@ function AddComplaint() {
   };
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-center bg-green-50">
+    <div className="w-full min-h-screen flex justify-center items-center bg-stone-50">
       <div className="border w-120 min-h-175 rounded-2xl px-12 py-8">
         <div className="mb-8">
-          <h1 className="font-bold text-3xl text-center text-green-700">
+          <h1 className="font-bold text-3xl text-center text-black">
             Add Complaint
           </h1>
         </div>
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
-            <label className="mb-2 block font-bold text-green-700">
+            <label className="mb-2 block font-bold text-black">
               Title
             </label>
             <input
@@ -89,7 +89,7 @@ function AddComplaint() {
             />
           </div>
           <div className="mb-5">
-            <label className="mb-2 block font-bold text-green-700">
+            <label className="mb-2 block font-bold text-black">
               Category
             </label>
             <select
@@ -202,7 +202,7 @@ function AddComplaint() {
             )}
           </div>
           <div className="mb-5">
-            <label className="mb-2 block font-bold text-green-700">
+            <label className="mb-2 block font-bold text-black">
               Description
             </label>
             <textarea
@@ -215,7 +215,7 @@ function AddComplaint() {
             />
           </div>
           <div className="mb-5">
-            <label className="mb-2 block text-sm font-bold text-green-700">
+            <label className="mb-2 block text-sm font-bold text-black">
               Complaint Location
             </label>
 
@@ -236,7 +236,7 @@ function AddComplaint() {
                   </p>
                 </div>
               ) : (
-                <span className="text-green-500">
+                <span className="text-black">
                   Select complaint location from map
                 </span>
               )}
@@ -246,7 +246,7 @@ function AddComplaint() {
               <button
                 type="button"
                 onClick={() => setShowLocationPicker(true)}
-                className="mt-2 text-sm font-medium text-green-600 hover:underline"
+                className="mt-2 text-sm font-medium text-black hover:underline"
               >
                 Change Location
               </button>
@@ -266,7 +266,7 @@ function AddComplaint() {
             />
           )}
           <div className="mb-5">
-            <label className="mb-2 block font-bold text-green-700">
+            <label className="mb-2 block font-bold text-black">
               Evidence Images
             </label>
             <input
@@ -310,14 +310,14 @@ function AddComplaint() {
             <button
               type="button"
               onClick={() => navigate("/home")}
-              className="rounded-xl border border-green-300 px-5 py-3 font-medium text-green-700 transition hover:bg-gray-100"
+              className="rounded-xl border border-slate-300 px-5 py-3 font-medium text-slate-700 transition hover:bg-gray-100"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="rounded-xl bg-green-400 px-6 py-3 font-bold text-black cursor-pointer disabled:opacity-50"
+              className="rounded-xl bg-stone-400 px-6 py-3 font-semibold text-black cursor-pointer disabled:opacity-50"
             >
               {loading ? "Submitting..." : "Submit Complaint"}
             </button>

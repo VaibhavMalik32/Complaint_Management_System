@@ -124,16 +124,16 @@ const ManageEmployees = () => {
     );
   }
   return (
-    <div className="h-screen w-screen justify-center items-center flex bg-green-50">
+    <div className="h-screen w-screen justify-center items-center flex bg-stone-50">
         <div className="min-h-screen border rounded-2xl p-6">
         <div className="mx-auto max-w-7xl">
             <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-                <h1 className="text-2xl font-bold text-green-800">
+                <h1 className="text-2xl font-bold text-stone-800">
                 Manage Employees
                 </h1>
                 {admin && (
-                <p className="mt-2 text-sm text-green-700">
+                <p className="mt-2 text-sm text-stone-800">
                     Department:{" "}
                     <span className="font-semibold">
                     {admin.department || "N/A"}
@@ -171,7 +171,7 @@ const ManageEmployees = () => {
             <div className="overflow-hidden rounded-xl bg-white shadow">
                 <div className="overflow-x-auto">
                 <table className="w-full">
-                    <thead className="bg-green-200">
+                    <thead className="bg-stone-200">
                     <tr>
                         <th className="px-5 py-3 text-left text-sm font-semibold text-gray-700">
                         ID
@@ -200,7 +200,7 @@ const ManageEmployees = () => {
                     {employees.map((employee) => (
                         <tr
                         key={employee.user_id}
-                        className="bg-green-50"
+                        className="bg-stone-50"
                         >
                         <td className="px-5 py-4 text-sm text-gray-700">
                             {employee.user_id}
@@ -254,13 +254,13 @@ const ManageEmployees = () => {
             )}
             {showTransfer && selectedEmployee && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-                <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-green-50 shadow-xl">
+                <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl bg-stone-50 shadow-xl">
                 <div className="flex items-center justify-between border-b p-6">
                     <div>
-                    <h2 className="text-xl font-bold text-green-800">
+                    <h2 className="text-xl font-bold text-stone-800">
                         Transfer Employee
                     </h2>
-                    <p className="mt-1 text-sm text-green-600">
+                    <p className="mt-1 text-sm text-stone-600">
                         {selectedEmployee.full_name}
                     </p>
                     </div>
@@ -269,7 +269,7 @@ const ManageEmployees = () => {
                         setShowTransfer(false);
                         setSelectedEmployee(null);
                     }}
-                    className="text-2xl text-green-500 hover:text-green-800"
+                    className="text-2xl text-stone-800"
                     >
                     ×
                     </button>
@@ -280,18 +280,18 @@ const ManageEmployees = () => {
                 >
                     <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-green-700">
+                        <label className="mb-1 block text-sm font-medium text-stone-800">
                         Department
                         </label>
                         <input
                         type="text"
                         value={admin?.department || ""}
                         disabled
-                        className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-green-200 px-3 py-2 text-green-600"
+                        className="w-full cursor-not-allowed rounded-lg border border-gray-300 bg-stone-200 px-3 py-2 text-stone-600"
                         />
                     </div>
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-green-700">
+                        <label className="mb-1 block text-sm font-medium text-stone-800">
                         Post
                         </label>
                         <input
@@ -301,11 +301,11 @@ const ManageEmployees = () => {
                         onChange={handleChange}
                         required
                         placeholder="Enter post"
-                        className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                        className="w-full rounded-lg border px-3 py-2 outline-none bg-stone-200"
                         />
                     </div>
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-green-700">
+                        <label className="mb-1 block text-sm font-medium text-stone-800">
                         City
                         </label>
                         <input
@@ -314,11 +314,11 @@ const ManageEmployees = () => {
                         value={formData.city}
                         onChange={handleChange}
                         required
-                        className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                        className="w-full rounded-lg border px-3 py-2 outline-none bg-stone-200"
                         />
                     </div>
                     <div>
-                        <label className="mb-1 block text-sm font-medium text-green-700">
+                        <label className="mb-1 block text-sm font-medium text-stone-800">
                         State
                         </label>
                         <input
@@ -327,11 +327,11 @@ const ManageEmployees = () => {
                         value={formData.state}
                         onChange={handleChange}
                         required
-                        className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                        className="w-full rounded-lg border px-3 py-2 outline-none bg-stone-200"
                         />
                     </div>
                     <div className="md:col-span-2">
-                        <label className="mb-1 block text-sm font-medium text-green-700">
+                        <label className="mb-1 block text-sm font-medium text-stone-800">
                         Address
                         </label>
                         <textarea
@@ -341,7 +341,7 @@ const ManageEmployees = () => {
                         required
                         rows="3"
                         placeholder="Enter employee address"
-                        className="w-full rounded-lg border px-3 py-2 outline-none bg-green-200"
+                        className="w-full rounded-lg border px-3 py-2 outline-none bg-stone-200"
                         />
                     </div>
                     </div>

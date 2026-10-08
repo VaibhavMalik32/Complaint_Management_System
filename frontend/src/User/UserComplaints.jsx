@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getMyComplaints,
   deleteComplaint,
@@ -7,13 +7,19 @@ import {
 
 function UserComplaints() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const activeTab = searchParams.get("status") || "all";
+
   const fetchComplaints = async () => {
     try {
       setLoading(true);
       setError("");
+
       const data = await getMyComplaints();
       setComplaints(data);
     } catch (err) {
@@ -22,19 +28,27 @@ function UserComplaints() {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     fetchComplaints();
-  }, []); 
+  }, []);
+
+  const changeTab = (status) => {
+    setSearchParams({ status });
+  };
 
   const handleDelete = async (complaintId) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this complaint?"
     );
+
     if (!confirmed) {
       return;
     }
+
     try {
       await deleteComplaint(complaintId);
+
       setComplaints((prev) =>
         prev.filter(
           (complaint) =>
@@ -45,37 +59,130 @@ function UserComplaints() {
       setError(err.message);
     }
   };
+
   const getStatusStyle = (status) => {
     switch (status) {
-      case "Approved":
       case "Resolved":
         return "bg-green-100 text-green-700";
+
       case "Rejected":
         return "bg-red-100 text-red-700";
+
       case "In Progress":
         return "bg-blue-100 text-blue-700";
+
       case "In Review":
       default:
         return "bg-yellow-100 text-yellow-700";
     }
   };
 
+  const filteredComplaints =
+    activeTab === "all"
+      ? complaints
+      : complaints.filter(
+          (complaint) => complaint.status === activeTab
+        );
+
   return (
-    <div className="min-h-screen w-full bg-green-50 p-6 md:p-10">
+    <div className="min-h-screen w-full bg-stone-50 p-6 md:p-10">
       <div className="mx-auto w-full max-w-5xl">
 
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-green-800">
-              My Complaints
-            </h1>
-          </div>
+          <h1 className="text-3xl font-bold text-black">
+            My Complaints
+          </h1>
 
           <button
             onClick={() => navigate("/home/create-complaint")}
-            className="rounded-xl bg-green-400 px-5 py-3 font-semibold text-green-700"
+            className="rounded-xl bg-stone-400 px-5 py-3 font-semibold text-black"
           >
             + Add Complaint
+          </button>
+        </div>
+
+        <div className="mb-6 flex flex-wrap gap-3">
+          <button
+            onClick={() => changeTab("all")}
+            className={`rounded-xl px-5 py-3 ${
+              activeTab === "all"
+                ? "bg-stone-500 text-white"
+                : "border bg-slate-100 text-slate-700"
+            }`}
+          >
+            All ({complaints.length})
+          </button>
+
+          <button
+            onClick={() => changeTab("In Review")}
+            className={`rounded-xl px-5 py-3 ${
+              activeTab === "In Review"
+                ? "bg-stone-500 text-white"
+                : "border bg-slate-100 text-slate-700"
+            }`}
+          >
+            In Review (
+            {
+              complaints.filter(
+                (complaint) =>
+                  complaint.status === "In Review"
+              ).length
+            }
+            )
+          </button>
+
+          <button
+            onClick={() => changeTab("In Progress")}
+            className={`rounded-xl px-5 py-3 ${
+              activeTab === "In Progress"
+                ? "bg-stone-500 text-white"
+                : "border bg-slate-100 text-slate-700"
+            }`}
+          >
+            In Progress (
+            {
+              complaints.filter(
+                (complaint) =>
+                  complaint.status === "In Progress"
+              ).length
+            }
+            )
+          </button>
+
+          <button
+            onClick={() => changeTab("Resolved")}
+            className={`rounded-xl px-5 py-3 ${
+              activeTab === "Resolved"
+                ? "bg-stone-500 text-white"
+                : "border bg-slate-100 text-slate-700"
+            }`}
+          >
+            Resolved (
+            {
+              complaints.filter(
+                (complaint) =>
+                  complaint.status === "Resolved"
+              ).length
+            }
+            )
+          </button>
+
+          <button
+            onClick={() => changeTab("Rejected")}
+            className={`rounded-xl px-5 py-3 ${
+              activeTab === "Rejected"
+                ? "bg-stone-500 text-white"
+                : "border bg-slate-100 text-slate-700"
+            }`}
+          >
+            Rejected (
+            {
+              complaints.filter(
+                (complaint) =>
+                  complaint.status === "Rejected"
+              ).length
+            }
+            )
           </button>
         </div>
 
@@ -86,47 +193,47 @@ function UserComplaints() {
         )}
 
         {loading && (
-          <div className="rounded-2xl border bg-green-400 p-10 text-center shadow-sm">
-            <p className="text-green-500">
-              Loading your complaints...
-            </p>
+          <div className="rounded-2xl border bg-white p-10 text-center">
+            <p>Loading your complaints...</p>
           </div>
         )}
 
-        {!loading && complaints.length === 0 && (
-          <div className="rounded-2xl border bg-green-400 p-10 text-center shadow-sm md:p-14">
-            <h2 className="text-xl font-semibold text-green-800">
-              No Complaints Yet
+        {!loading && filteredComplaints.length === 0 && (
+          <div className="rounded-2xl border bg-white p-10 text-center md:p-14">
+            <h2 className="text-xl font-semibold text-stone-800">
+              No Complaints Found
             </h2>
+
+            <p className="mt-2 text-gray-600">
+              There are no complaints in this category.
+            </p>
 
             <button
               onClick={() =>
                 navigate("/home/create-complaint")
               }
-              className="mt-6 rounded-xl bg-green-400 px-6 py-3 font-semibold text-green-700 cursor-pointer"
+              className="mt-6 rounded-xl bg-slate-400 px-6 py-3 font-semibold text-black"
             >
               Submit Complaint
             </button>
           </div>
         )}
 
-        {!loading && complaints.length > 0 && (
+        {!loading && filteredComplaints.length > 0 && (
           <div className="space-y-5">
-            {complaints.map((complaint) => (
+            {filteredComplaints.map((complaint) => (
               <div
                 key={complaint.complaint_id}
-                className="rounded-2xl border bg-green-100 p-6 shadow-sm transition hover:shadow-md"
+                className="rounded-2xl border bg-slate-100 p-6 shadow-sm"
               >
-
                 <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
-
                   <div>
                     <div className="flex flex-wrap items-center gap-3">
-                      <label className="text-xl font-bold text-green-800">
+                      <label className="text-xl font-bold text-black">
                         Title -
                       </label>
 
-                      <h2 className="text-s text-gray-800">
+                      <h2 className="text-gray-800">
                         {complaint.title}
                       </h2>
 
@@ -143,11 +250,10 @@ function UserComplaints() {
                   <span className="w-fit rounded-full bg-gray-800 px-4 py-1.5 text-sm font-medium text-white">
                     {complaint.category}
                   </span>
-
                 </div>
 
                 <div className="mt-4">
-                  <label className="font-bold text-xl text-green-800">
+                  <label className="text-xl font-bold text-black">
                     Description -
                   </label>
 
@@ -157,20 +263,26 @@ function UserComplaints() {
                 </div>
 
                 <div className="mt-4 flex">
-                  <label className="font-bold text-xl text-green-800">
+                  <label className="text-xl font-bold text-black">
                     Complaint Location -
                   </label>
-                  <p className="mt-1 ml-1 text-gray-700">
+
+                  <p className="ml-1 mt-1 text-gray-700">
                     {complaint.location || "N/A"}
                   </p>
                 </div>
-                <br />
-                <div className="flex">
-                  <h1 className="font-bold text-xl text-green-800">Assigned to -</h1>
-                  <p className="mt-1 ml-1">{complaint.employee_name || "Not Assigned"}</p>
-                </div>
-                <div className="mt-6 flex flex-col justify-between gap-4 border-t border-gray-100 pt-4 sm:flex-row sm:items-center">
 
+                <div className="mt-4 flex">
+                  <h1 className="text-xl font-bold text-black">
+                    Assigned to -
+                  </h1>
+
+                  <p className="ml-1 mt-1">
+                    {complaint.employee_name || "Not Assigned"}
+                  </p>
+                </div>
+
+                <div className="mt-6 flex flex-col justify-between gap-4 border-t border-gray-100 pt-4 sm:flex-row sm:items-center">
                   <p className="text-sm">
                     Submitted on{" "}
                     {complaint.created_at
@@ -181,7 +293,6 @@ function UserComplaints() {
                   </p>
 
                   <div className="flex gap-3">
-
                     {complaint.status === "Resolved" && (
                       <button
                         onClick={() =>
@@ -201,7 +312,7 @@ function UserComplaints() {
                           `/home/complaints/${complaint.complaint_id}`
                         )
                       }
-                      className="rounded-xl border px-5 py-3 font-medium text-black cursor-pointer"
+                      className="rounded-xl border px-5 py-3 font-medium text-black"
                     >
                       View
                     </button>
@@ -214,15 +325,12 @@ function UserComplaints() {
                     >
                       Delete
                     </button>
-
                   </div>
                 </div>
-
               </div>
             ))}
           </div>
         )}
-
       </div>
     </div>
   );

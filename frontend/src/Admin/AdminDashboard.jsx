@@ -10,12 +10,14 @@ import { useNavigate } from "react-router-dom";
 
 function AdminDashboard() {
   const navigate = useNavigate();
+
   const [complaints, setComplaints] = useState([]);
   const [employees, setEmployees] = useState([]);
   const [selectedEmployees, setSelectedEmployees] = useState({});
   const [loading, setLoading] = useState(true);
   const [assigning, setAssigning] = useState(null);
   const [error, setError] = useState("");
+
   const fetchComplaints = async () => {
     try {
       setLoading(true);
@@ -28,33 +30,40 @@ function AdminDashboard() {
       setLoading(false);
     }
   };
+
   const fetchEmployees = async () => {
     try {
       const data = await getMatchingEmployees();
-
       setEmployees(data);
     } catch (err) {
       console.log(err);
       setError(err.message);
     }
   };
+
   useEffect(() => {
     fetchComplaints();
     fetchEmployees();
   }, []);
+
   const total = complaints.length;
+
   const inReview = complaints.filter(
     (c) => c.status === "In Review"
   ).length;
+
   const inProgress = complaints.filter(
     (c) => c.status === "In Progress"
   ).length;
+
   const resolved = complaints.filter(
     (c) => c.status === "Resolved"
   ).length;
+
   const rejected = complaints.filter(
     (c) => c.status === "Rejected"
   ).length;
+
   const handleStatusChange = async (
     complaintId,
     newStatus
@@ -64,12 +73,14 @@ function AdminDashboard() {
         complaintId,
         newStatus
       );
+
       await fetchComplaints();
     } catch (err) {
       console.log(err);
       setError(err.message);
     }
   };
+
   const handleEmployeeChange = (
     complaintId,
     employeeId
@@ -79,20 +90,27 @@ function AdminDashboard() {
       [complaintId]: employeeId,
     });
   };
+
   const handleAssign = async (complaintId) => {
-    const employeeId = selectedEmployees[complaintId];
+    const employeeId =
+      selectedEmployees[complaintId];
+
     if (!employeeId) {
       setError("Please select an employee first.");
       return;
     }
+
     try {
       setError("");
       setAssigning(complaintId);
+
       await assignComplaint(
         complaintId,
         Number(employeeId)
       );
+
       await fetchComplaints();
+
       setSelectedEmployees((prev) => {
         const updated = { ...prev };
         delete updated[complaintId];
@@ -105,56 +123,92 @@ function AdminDashboard() {
       setAssigning(null);
     }
   };
+
+  const handleComplaintClick = (complaintId) => {
+    navigate(`/admin/complaints/${complaintId}`);
+  };
+
   return (
-    <div className="min-h-screen w-full bg-green-50">
+    <div className="min-h-screen w-full bg-stone-50">
       <div className="border-b px-8 py-4">
-        <h1 className="text-center text-3xl font-semibold text-green-800">
+        <h1 className="text-center text-3xl font-semibold text-stone-800">
           Admin Dashboard
         </h1>
       </div>
+
       <div className="mx-auto max-w-7xl px-8 py-10">
         {error && (
           <div className="mb-6 rounded-lg border border-red-300 bg-red-50 px-4 py-3 text-red-600">
             {error}
           </div>
         )}
+
         {loading ? (
           <div className="flex justify-center py-20">
             <p>Loading...</p>
           </div>
         ) : (
-          <>
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
+          <div className="flex">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-2 w-100">
+              <div
+                onClick={() => navigate("/admin/complaints")}
+                className="flex h-30 items-center justify-center rounded-2xl border-2 bg-stone-100"
+              >
                 <p className="text-lg">
                   Total - {total}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
+
+              <div
+                onClick={() =>
+                  navigate("/admin/complaints?status=In%20Review")
+                }
+                className="flex h-30 items-center justify-center rounded-2xl border-2 bg-stone-100"
+              >
                 <p className="text-lg">
                   In Review - {inReview}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
+
+              <div
+                onClick={() =>
+                  navigate("/admin/complaints?status=In%20Progress")
+                }
+                className="flex h-30 items-center justify-center rounded-2xl border-2 bg-stone-100"
+              >
                 <p className="text-lg">
                   In Progress - {inProgress}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
+
+              <div
+                onClick={() =>
+                  navigate("/admin/complaints?status=Resolved")
+                }
+                className="flex h-30 items-center justify-center rounded-2xl border-2 bg-stone-100"
+              >
                 <p className="text-lg">
                   Resolved - {resolved}
                 </p>
               </div>
-              <div className="flex h-40 items-center justify-center rounded-2xl border-2 bg-green-100">
+
+              <div
+                onClick={() =>
+                  navigate("/admin/complaints?status=Rejected")
+                }
+                className="flex h-30 items-center justify-center rounded-2xl border-2 bg-stone-100"
+              >
                 <p className="text-lg">
                   Rejected - {rejected}
                 </p>
               </div>
             </div>
-            <div className="mt-12">
-              <h2 className="mb-5 text-2xl font-semibold text-green-800">
+
+            <div className="ml-15">
+              <h2 className="mb-5 text-2xl font-semibold text-stone-800">
                 Complaints
               </h2>
+
               {complaints.length === 0 ? (
                 <div className="rounded-xl border p-8 text-center">
                   <p>No complaints found.</p>
@@ -163,43 +217,62 @@ function AdminDashboard() {
                 <div className="overflow-x-auto rounded-xl border">
                   <table className="w-full border-collapse">
                     <thead>
-                      <tr className="border-b bg-green-200">
+                      <tr className="border-b bg-stone-200">
                         <th className="px-5 py-4 text-left">
                           ID
                         </th>
+
                         <th className="px-5 py-4 text-left">
                           Title
                         </th>
+
                         <th className="px-5 py-4 text-left">
                           Category
                         </th>
+
                         <th className="px-5 py-4 text-left">
                           Status
                         </th>
+
                         <th className="px-5 py-4 text-left">
                           Employee
                         </th>
+
                         <th className="px-5 py-4 text-left">
                           Date
                         </th>
                       </tr>
                     </thead>
+
                     <tbody>
                       {complaints.map((complaint) => (
                         <tr
                           key={complaint.complaint_id}
                           className="border-b"
+                          onClick={() =>
+                            handleComplaintClick(
+                              complaint.complaint_id
+                            )
+                          }
                         >
                           <td className="px-5 py-4">
                             {complaint.complaint_id}
                           </td>
+
                           <td className="px-5 py-4">
                             {complaint.title}
                           </td>
+
                           <td className="px-5 py-4">
                             {complaint.category}
                           </td>
-                          <td className="px-5 py-4">
+
+                          <td
+                            className="px-5 py-4"
+                            onClick={(e) =>
+                              e.stopPropagation()
+                            }
+                          >
                             <select
                               value={complaint.status}
                               onChange={(e) =>
@@ -213,18 +286,27 @@ function AdminDashboard() {
                               <option value="In Review">
                                 In Review
                               </option>
+
                               <option value="In Progress">
                                 In Progress
                               </option>
+
                               <option value="Resolved">
                                 Resolved
                               </option>
+
                               <option value="Rejected">
                                 Rejected
                               </option>
                             </select>
                           </td>
-                          <td className="px-5 py-4">
+
+                          <td
+                            className="px-5 py-4"
+                            onClick={(e) =>
+                              e.stopPropagation()
+                            }
+                          >
                             <div className="flex items-center gap-2">
                               <select
                                 value={
@@ -245,6 +327,7 @@ function AdminDashboard() {
                                 <option value="">
                                   Select Employee
                                 </option>
+
                                 {employees.map(
                                   (employee) => (
                                     <option
@@ -256,6 +339,7 @@ function AdminDashboard() {
                                   )
                                 )}
                               </select>
+
                               <button
                                 onClick={() =>
                                   handleAssign(
@@ -272,10 +356,10 @@ function AdminDashboard() {
                                 complaint.complaint_id
                                   ? "Assigning..."
                                   : "Assign"}
-
                               </button>
                             </div>
                           </td>
+
                           <td className="px-5 py-4">
                             {complaint.created_at
                               ? new Date(
@@ -290,7 +374,7 @@ function AdminDashboard() {
                 </div>
               )}
             </div>
-          </>
+          </div>
         )}
       </div>
     </div>
